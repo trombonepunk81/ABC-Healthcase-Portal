@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Healthcare Help Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-400: #94a3b8;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --teal-600: #0d9488;
+            --teal-500: #14b8a6;
+            --teal-400: #2dd4bf;
+            --amber-500: #f59e0b;
+            --amber-400: #fbbf24;
+            --white: #ffffff;
+            --shadow-soft: 0 4px 24px -4px rgba(15, 23, 42, 0.12);
+            --shadow-medium: 0 8px 32px -8px rgba(15, 23, 42, 0.2);
+            --shadow-strong: 0 16px 48px -12px rgba(15, 23, 42, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--slate-100);
+            min-height: 100vh;
+            color: var(--slate-800);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--slate-900) 0%, var(--slate-700) 100%);
+            padding: 3rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(20, 184, 166, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-badge svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .logo-badge span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--teal-400);
+        }
+
+        h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--slate-400);
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 600px;
+            margin: -2rem auto 3rem;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card */
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-strong);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Buttons */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .btn-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .btn-content {
+            flex: 1;
+        }
+
+        .btn-title {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .btn-desc {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .btn-arrow {
+            width: 24px;
+            height: 24px;
+            opacity: 0.6;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .action-btn:hover .btn-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        /* Button Variants */
+        .btn-maintenance {
+            background: linear-gradient(135deg, var(--teal-600) 0%, var(--teal-500) 100%);
+            color: var(--white);
+        }
+
+        .btn-maintenance .btn-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-portal {
+            background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-600) 100%);
+            color: var(--white);
+        }
+
+        .btn-portal .btn-icon {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-service {
+            background: linear-gradient(135deg, var(--amber-500) 0%, var(--amber-400) 100%);
+            color: var(--slate-900);
+        }
+
+        .btn-service .btn-icon {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Scanner View */
+        .scanner-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--slate-200);
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--slate-50);
+            border-color: var(--slate-300);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--slate-600);
+        }
+
+        .scanner-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+
+        .scanner-subtitle {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+        }
+
+        .scanner-frame {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--slate-900);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        #qr-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .scanner-box {
+            width: 65%;
+            height: 65%;
+            border: 3px solid var(--teal-400);
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.6);
+        }
+
+        .scanner-box::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: var(--teal-400);
+            box-shadow: 0 0 20px var(--teal-400);
+            animation: scanLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scanLine {
+            0%, 100% { top: -3px; }
+            50% { top: calc(100% - 0px); }
+        }
+
+        .scanner-corners {
+            position: absolute;
+            inset: -3px;
+        }
+
+        .scanner-corner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 4px solid var(--white);
+        }
+
+        .scanner-corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; border-radius: 16px 0 0 0; }
+        .scanner-corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; border-radius: 0 16px 0 0; }
+        .scanner-corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; border-radius: 0 0 0 16px; }
+        .scanner-corner.br { bottom: 0; right: 0; border-left: none; border-top: none; border-radius: 0 0 16px 0; }
+
+        .scanner-instructions {
+            text-align: center;
+            color: var(--slate-600);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .scanner-instructions strong {
+            color: var(--slate-800);
+        }
+
+        /* Mode Indicator */
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .mode-badge.maintenance {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--teal-600);
+        }
+
+        .mode-badge.portal {
+            background: rgba(71, 85, 105, 0.1);
+            color: var(--slate-600);
+        }
+
+        .mode-badge.service {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--amber-500);
+        }
+
+        /* Result View */
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-400) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .result-icon svg {
+            width: 40px;
+            height: 40px;
+            color: var(--white);
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-desc {
+            text-align: center;
+            color: var(--slate-500);
+            margin-bottom: 2rem;
+        }
+
+        .result-details {
+            background: var(--slate-50);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+        }
+
+        .detail-value {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--slate-800);
+            text-align: right;
+            max-width: 60%;
+            word-break: break-all;
+        }
+
+        .primary-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--teal-600) 0%, var(--teal-500) 100%);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .secondary-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            background: var(--white);
+            color: var(--slate-600);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.75rem;
+        }
+
+        .secondary-btn:hover {
+            background: var(--slate-50);
+            border-color: var(--slate-300);
+        }
+
+        /* Demo Input */
+        .demo-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--slate-300);
+        }
+
+        .demo-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--slate-400);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            font-family: 'DM Sans', monospace;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            margin-bottom: 0.75rem;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: var(--teal-500);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        .demo-btn {
+            display: block;
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px dashed var(--slate-300);
+            border-radius: 10px;
+            background: var(--slate-50);
+            color: var(--slate-600);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .demo-btn:hover {
+            background: var(--slate-100);
+            border-color: var(--slate-400);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--slate-400);
+            font-size: 0.8rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--slate-200);
+            border-top-color: var(--teal-500);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--slate-500);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-badge">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--teal-400)">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Facility Services</span>
+            </div>
+            <h1>ABC Healthcare<br>Help Center</h1>
+            <p class="subtitle">Asset management & maintenance support</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- View 1: Main Menu -->
+        <div id="menu-view" class="view active">
+            <div class="card">
+                <div class="card-body">
+                    <button class="action-btn btn-maintenance" onclick="startScanner('maintenance')">
+                        <div class="btn-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="btn-content">
+                            <span class="btn-title">Send Issue to Building Maintenance</span>
+                            <span class="btn-desc">Report a problem via email with asset details</span>
+                        </div>
+                        <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <button class="action-btn btn-portal" onclick="startScanner('portal')">
+                        <div class="btn-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
+                            </svg>
+                        </div>
+                        <div class="btn-content">
+                            <span class="btn-title">Maintenance Portal</span>
+                            <span class="btn-desc">View asset directly in Autodesk Tandem</span>
+                        </div>
+                        <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <button class="action-btn btn-service" onclick="startScanner('service')">
+                        <div class="btn-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div class="btn-content">
+                            <span class="btn-title">Service Platform</span>
+                            <span class="btn-desc">Access asset in CMMS (Tririga/Maximo)</span>
+                        </div>
+                        <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Scanner -->
+        <div id="scanner-view" class="view">
+            <div class="card">
+                <div class="card-body">
+                    <div class="scanner-header">
+                        <button class="back-btn" onclick="showMenu()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <div>
+                            <div class="scanner-title">Scan QR Code</div>
+                            <div class="scanner-subtitle" id="scanner-mode-text">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div id="mode-indicator"></div>
+
+                    <div class="scanner-frame">
+                        <video id="qr-video" autoplay playsinline></video>
+                        <div class="scanner-overlay">
+                            <div class="scanner-box">
+                                <div class="scanner-corners">
+                                    <div class="scanner-corner tl"></div>
+                                    <div class="scanner-corner tr"></div>
+                                    <div class="scanner-corner bl"></div>
+                                    <div class="scanner-corner br"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="scanner-instructions">
+                        Position the <strong>QR code</strong> within the frame.<br>
+                        The scan will happen automatically.
+                    </p>
+
+                    <!-- Demo/Test Input for development -->
+                    <div class="demo-section">
+                        <span class="demo-label">Demo Mode — Paste Tandem URL</span>
+                        <input type="text" id="demo-url" class="demo-input" 
+                               placeholder="https://tandem.autodesk.com/pages/facilities/...">
+                        <button class="demo-btn" onclick="simulateScan()">
+                            Simulate QR Scan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 3: Processing -->
+        <div id="processing-view" class="view">
+            <div class="card">
+                <div class="card-body">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div class="loading-text" id="processing-text">Processing asset...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 4: Result -->
+        <div id="result-view" class="view">
+            <div class="card">
+                <div class="card-body">
+                    <div class="result-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h2 class="result-title" id="result-title">Ready!</h2>
+                    <p class="result-desc" id="result-desc">Your action is ready to execute.</p>
+                    
+                    <div class="result-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Asset ID</span>
+                            <span class="detail-value" id="result-asset-id">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Action</span>
+                            <span class="detail-value" id="result-action">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Source URL</span>
+                            <span class="detail-value" id="result-url">—</span>
+                        </div>
+                    </div>
+
+                    <a href="#" id="action-link" class="primary-btn">Execute Action</a>
+                    <button class="secondary-btn" onclick="showMenu()">Start Over</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2025 ABC Healthcare · Help Center v1.0
+    </footer>
+
+    <!-- QR Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <script>
+        // State
+        let currentMode = null;
+        let html5QrCode = null;
+        let scannedData = null;
+
+        // Mode configurations
+        const modes = {
+            maintenance: {
+                title: 'Send Issue to Building Maintenance',
+                subtitle: 'Scanning for maintenance email...',
+                badge: 'maintenance',
+                action: 'Email to maintenance@ABChealthcare.com',
+                resultTitle: 'Email Ready',
+                resultDesc: 'Click below to open your email client with asset details pre-filled.'
+            },
+            portal: {
+                title: 'Maintenance Portal',
+                subtitle: 'Scanning for Tandem portal...',
+                badge: 'portal',
+                action: 'Open in Autodesk Tandem',
+                resultTitle: 'Portal Link Ready',
+                resultDesc: 'Click below to view this asset in Autodesk Tandem.'
+            },
+            service: {
+                title: 'Service Platform',
+                subtitle: 'Scanning for CMMS platform...',
+                badge: 'service',
+                action: 'Open in Tririga CMMS',
+                resultTitle: 'Service Platform Ready',
+                resultDesc: 'Click below to access the asset in your CMMS platform.'
+            }
+        };
+
+        // View management
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function showMenu() {
+            stopScanner();
+            currentMode = null;
+            showView('menu-view');
+        }
+
+        // Start scanner with selected mode
+        function startScanner(mode) {
+            currentMode = mode;
+            const config = modes[mode];
+            
+            // Update UI
+            document.getElementById('scanner-mode-text').textContent = config.subtitle;
+            document.getElementById('mode-indicator').innerHTML = 
+                `<span class="mode-badge ${config.badge}">${config.title}</span>`;
+            
+            showView('scanner-view');
+            initQrScanner();
+        }
+
+        // Initialize QR scanner
+        async function initQrScanner() {
+            const videoElem = document.getElementById('qr-video');
+            
+            try {
+                // Request camera access
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                videoElem.srcObject = stream;
+                
+                // Initialize Html5Qrcode
+                html5QrCode = new Html5Qrcode("qr-video", { verbose: false });
+                
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+                    {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 }
+                    },
+                    onScanSuccess,
+                    onScanFailure
+                );
+            } catch (err) {
+                console.log('Camera not available, use demo input:', err);
+            }
+        }
+
+        // Stop scanner
+        function stopScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().catch(err => console.log('Scanner stop error:', err));
+                html5QrCode = null;
+            }
+            
+            const videoElem = document.getElementById('qr-video');
+            if (videoElem.srcObject) {
+                videoElem.srcObject.getTracks().forEach(track => track.stop());
+                videoElem.srcObject = null;
+            }
+        }
+
+        // QR scan success handler
+        function onScanSuccess(decodedText, decodedResult) {
+            stopScanner();
+            processScannedData(decodedText);
+        }
+
+        // QR scan failure (just keep scanning)
+        function onScanFailure(error) {
+            // Silent fail - keep scanning
+        }
+
+        // Simulate scan for demo
+        function simulateScan() {
+            const demoUrl = document.getElementById('demo-url').value.trim();
+            if (demoUrl) {
+                stopScanner();
+                processScannedData(demoUrl);
+            } else {
+                // Use sample Tandem URL for testing
+                const sampleUrl = 'https://tandem.autodesk.com/pages/facilities/abc-hospital/assets/HVAC-AHU-001';
+                stopScanner();
+                processScannedData(sampleUrl);
+            }
+        }
+
+        // Process the scanned data
+        function processScannedData(data) {
+            scannedData = data;
+            
+            // Show processing
+            showView('processing-view');
+            document.getElementById('processing-text').textContent = 'Preparing your action...';
+            
+            // Extract asset ID from URL (simplified extraction)
+            const assetId = extractAssetId(data);
+            
+            // Simulate brief processing delay
+            setTimeout(() => {
+                prepareResult(assetId, data);
+            }, 1000);
+        }
+
+        // Extract asset ID from Tandem URL
+        function extractAssetId(url) {
+            // Try to extract from common URL patterns
+            // Example: https://tandem.autodesk.com/.../assets/HVAC-AHU-001
+            const patterns = [
+                /assets\/([^\/\?]+)/i,
+                /asset[=\/]([^\/\?&]+)/i,
+                /id[=\/]([^\/\?&]+)/i
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            
+            // Fallback: use last path segment or generate ID
+            const pathParts = url.split('/').filter(p => p);
+            return pathParts[pathParts.length - 1] || 'ASSET-' + Date.now();
+        }
+
+        // Prepare and show result
+        function prepareResult(assetId, sourceUrl) {
+            const config = modes[currentMode];
+            let actionUrl = '';
+            let buttonText = '';
+            
+            switch (currentMode) {
+                case 'maintenance':
+                    // Create mailto link with asset info
+                    const subject = encodeURIComponent(`Maintenance Issue - Asset: ${assetId}`);
+                    const body = encodeURIComponent(
+                        `Hello Maintenance Team,\n\n` +
+                        `I would like to report an issue with the following asset:\n\n` +
+                        `Asset ID: ${assetId}\n` +
+                        `Asset Link: ${sourceUrl}\n\n` +
+                        `Issue Description:\n[Please describe the issue here]\n\n` +
+                        `Thank you.`
+                    );
+                    actionUrl = `mailto:maintenance@ABChealthcare.com?subject=${subject}&body=${body}`;
+                    buttonText = 'Open Email';
+                    break;
+                    
+                case 'portal':
+                    // Direct link to Tandem
+                    actionUrl = sourceUrl;
+                    buttonText = 'Open in Tandem';
+                    break;
+                    
+                case 'service':
+                    // Link to Tririga (or append asset ID as query param for future integration)
+                    actionUrl = `https://td-external.tririga.com/login?asset=${encodeURIComponent(assetId)}`;
+                    buttonText = 'Open in Tririga';
+                    break;
+            }
+            
+            // Update result view
+            document.getElementById('result-title').textContent = config.resultTitle;
+            document.getElementById('result-desc').textContent = config.resultDesc;
+            document.getElementById('result-asset-id').textContent = assetId;
+            document.getElementById('result-action').textContent = config.action;
+            document.getElementById('result-url').textContent = sourceUrl.substring(0, 40) + '...';
+            
+            const actionLink = document.getElementById('action-link');
+            actionLink.href = actionUrl;
+            actionLink.textContent = buttonText;
+            
+            // For email, we don't need target blank
+            if (currentMode === 'maintenance') {
+                actionLink.removeAttribute('target');
+            } else {
+                actionLink.setAttribute('target', '_blank');
+            }
+            
+            showView('result-view');
+        }
+    </script>
+</body>
+</html>
