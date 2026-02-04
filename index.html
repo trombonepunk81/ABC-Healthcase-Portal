@@ -147,6 +147,48 @@
             padding: 2rem;
         }
 
+        /* Asset Info Banner */
+        .asset-banner {
+            background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-700) 100%);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .asset-banner-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--teal-400);
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-banner-id {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .asset-banner-link {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            margin-top: 0.5rem;
+            word-break: break-all;
+            display: block;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--slate-400);
+            margin-bottom: 1rem;
+        }
+
         /* Buttons */
         .action-btn {
             display: flex;
@@ -165,6 +207,7 @@
             margin-bottom: 1rem;
             position: relative;
             overflow: hidden;
+            text-decoration: none;
         }
 
         .action-btn:last-child {
@@ -265,176 +308,89 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
-        /* Scanner View */
-        .scanner-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        /* No Asset View */
+        .no-asset-message {
+            text-align: center;
+            padding: 2rem 1rem;
         }
 
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: 1px solid var(--slate-200);
-            background: var(--white);
-            cursor: pointer;
+        .no-asset-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--slate-100);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            margin: 0 auto 1.25rem;
         }
 
-        .back-btn:hover {
-            background: var(--slate-50);
-            border-color: var(--slate-300);
+        .no-asset-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--slate-400);
         }
 
-        .back-btn svg {
-            width: 20px;
-            height: 20px;
-            color: var(--slate-600);
-        }
-
-        .scanner-title {
+        .no-asset-title {
             font-size: 1.25rem;
             font-weight: 600;
+            margin-bottom: 0.5rem;
             color: var(--slate-800);
         }
 
-        .scanner-subtitle {
-            font-size: 0.85rem;
+        .no-asset-desc {
             color: var(--slate-500);
-        }
-
-        /* Mode Indicator */
-        .mode-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .mode-badge.maintenance {
-            background: rgba(13, 148, 136, 0.1);
-            color: var(--teal-600);
-        }
-
-        .mode-badge.portal {
-            background: rgba(71, 85, 105, 0.1);
-            color: var(--slate-600);
-        }
-
-        .mode-badge.service {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--amber-500);
-        }
-
-        /* QR Reader */
-        #qr-reader {
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--slate-900);
-        }
-
-        #qr-reader video {
-            border-radius: 16px;
-        }
-
-        .scanner-instructions {
-            text-align: center;
-            color: var(--slate-600);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             line-height: 1.5;
-            margin-top: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
-        .scanner-instructions strong {
-            color: var(--slate-800);
+        .no-asset-steps {
+            background: var(--slate-50);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: left;
         }
 
-        /* Status Messages */
-        .status-message {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-        }
-
-        .status-message.error {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-
-        .status-message.success {
-            background: #f0fdf4;
-            color: #16a34a;
-        }
-
-        .status-message.info {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
-        /* Demo Input */
-        .demo-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed var(--slate-300);
-        }
-
-        .demo-label {
+        .no-asset-steps-title {
             font-size: 0.75rem;
             font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-transform: uppercase;
             color: var(--slate-400);
             margin-bottom: 0.75rem;
-            display: block;
         }
 
-        .demo-input {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 1px solid var(--slate-200);
-            border-radius: 10px;
-            font-family: 'DM Sans', monospace;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
             margin-bottom: 0.75rem;
         }
 
-        .demo-input:focus {
-            outline: none;
-            border-color: var(--teal-500);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        .step:last-child {
+            margin-bottom: 0;
         }
 
-        .demo-btn {
-            display: block;
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 1px dashed var(--slate-300);
-            border-radius: 10px;
-            background: var(--slate-50);
-            color: var(--slate-600);
-            font-family: inherit;
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--teal-500);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-text {
             font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .demo-btn:hover {
-            background: var(--slate-100);
-            border-color: var(--slate-400);
+            color: var(--slate-600);
+            line-height: 1.4;
+            padding-top: 2px;
         }
 
         /* Result View */
@@ -544,51 +500,12 @@
             border-color: var(--slate-300);
         }
 
-        /* Loading State */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 2rem;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--slate-200);
-            border-top-color: var(--teal-500);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--slate-500);
-            font-size: 0.9rem;
-        }
-
-        .ocr-progress {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--slate-400);
-        }
-
         /* Footer */
         .footer {
             text-align: center;
             padding: 2rem;
             color: var(--slate-400);
             font-size: 0.8rem;
-        }
-
-        /* Hidden canvas for OCR */
-        #ocr-canvas {
-            display: none;
         }
     </style>
 </head>
@@ -607,11 +524,20 @@
     </header>
 
     <main class="main-content">
-        <!-- View 1: Main Menu -->
-        <div id="menu-view" class="view active">
+        <!-- View 1: Asset Loaded - Show Options -->
+        <div id="options-view" class="view">
             <div class="card">
                 <div class="card-body">
-                    <button class="action-btn btn-maintenance" onclick="startScanner('maintenance')">
+                    <!-- Asset Info Banner -->
+                    <div class="asset-banner">
+                        <div class="asset-banner-label">Asset Identified</div>
+                        <div class="asset-banner-id" id="display-asset-id">—</div>
+                        <span class="asset-banner-link" id="display-tandem-link">—</span>
+                    </div>
+
+                    <div class="section-title">What would you like to do?</div>
+
+                    <a href="#" id="btn-maintenance" class="action-btn btn-maintenance">
                         <div class="btn-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -624,9 +550,9 @@
                         <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                         </svg>
-                    </button>
+                    </a>
 
-                    <button class="action-btn btn-portal" onclick="startScanner('portal')">
+                    <a href="#" id="btn-portal" class="action-btn btn-portal" target="_blank">
                         <div class="btn-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
@@ -639,9 +565,9 @@
                         <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                         </svg>
-                    </button>
+                    </a>
 
-                    <button class="action-btn btn-service" onclick="startScanner('service')">
+                    <a href="#" id="btn-service" class="action-btn btn-service" target="_blank">
                         <div class="btn-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
@@ -655,402 +581,123 @@
                         <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- View 2: Scanner -->
-        <div id="scanner-view" class="view">
+        <!-- View 2: No Asset - Show Instructions -->
+        <div id="no-asset-view" class="view">
             <div class="card">
                 <div class="card-body">
-                    <div class="scanner-header">
-                        <button class="back-btn" onclick="goBack()">
+                    <div class="no-asset-message">
+                        <div class="no-asset-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                             </svg>
-                        </button>
-                        <div>
-                            <div class="scanner-title">Scan QR Code</div>
-                            <div class="scanner-subtitle" id="scanner-mode-text">Point camera at asset QR code</div>
+                        </div>
+                        <h2 class="no-asset-title">Scan an Asset QR Code</h2>
+                        <p class="no-asset-desc">
+                            To get started, use your device's camera to scan a QR code on any facility asset.
+                        </p>
+                        <div class="no-asset-steps">
+                            <div class="no-asset-steps-title">How it works</div>
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-text">Open your device's camera app</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">Point at the QR code on the asset</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-text">Tap the notification to open this portal</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-text">Choose your action</div>
+                            </div>
                         </div>
                     </div>
-
-                    <div id="mode-indicator"></div>
-
-                    <div id="qr-reader"></div>
-                    
-                    <div id="status-container"></div>
-
-                    <p class="scanner-instructions">
-                        Position the <strong>QR code</strong> and <strong>label text</strong> within the frame.<br>
-                        The asset ID will be read automatically.
-                    </p>
-
-                    <!-- Manual Entry -->
-                    <div class="demo-section">
-                        <span class="demo-label">Manual Entry</span>
-                        <input type="text" id="demo-asset" class="demo-input" 
-                               placeholder="Asset ID (e.g., CAM.E1879-A.01)">
-                        <input type="text" id="demo-url" class="demo-input" 
-                               placeholder="Tandem URL">
-                        <button class="demo-btn" onclick="simulateScan()">
-                            Submit Manually
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- View 3: Processing -->
-        <div id="processing-view" class="view">
-            <div class="card">
-                <div class="card-body">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <div class="loading-text" id="processing-text">Processing asset...</div>
-                        <div class="ocr-progress" id="ocr-progress"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- View 4: Result -->
-        <div id="result-view" class="view">
-            <div class="card">
-                <div class="card-body">
-                    <div class="result-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                    </div>
-                    <h2 class="result-title" id="result-title">Ready!</h2>
-                    <p class="result-desc" id="result-desc">Your action is ready to execute.</p>
-                    
-                    <div class="result-details">
-                        <div class="detail-row">
-                            <span class="detail-label">Asset ID</span>
-                            <span class="detail-value" id="result-asset-id">—</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Action</span>
-                            <span class="detail-value" id="result-action">—</span>
-                        </div>
-                    </div>
-
-                    <a href="#" id="action-link" class="primary-btn">Execute Action</a>
-                    <button class="secondary-btn" onclick="goBack()">Scan Another</button>
-                    <button class="secondary-btn" onclick="showMenu()">Start Over</button>
                 </div>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        © 2025 ABC Healthcare · Help Center v1.0
+        © 2025 ABC Healthcare · Help Center v2.0
     </footer>
 
-    <!-- Hidden canvas for OCR -->
-    <canvas id="ocr-canvas"></canvas>
-
-    <!-- Libraries -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    
     <script>
-        let currentMode = null;
-        let html5QrCode = null;
-        let tesseractWorker = null;
-        let videoElement = null;
-
-        const modes = {
-            maintenance: {
-                title: 'Send Issue to Building Maintenance',
-                badge: 'maintenance',
-                action: 'Email to maintenance@ABChealthcare.com',
-                resultTitle: 'Email Ready',
-                resultDesc: 'Tap below to open your email app with asset details pre-filled.'
-            },
-            portal: {
-                title: 'Maintenance Portal',
-                badge: 'portal',
-                action: 'Open in Autodesk Tandem',
-                resultTitle: 'Portal Link Ready',
-                resultDesc: 'Tap below to view this asset in Tandem.'
-            },
-            service: {
-                title: 'Service Platform',
-                badge: 'service',
-                action: 'Open in Tririga CMMS',
-                resultTitle: 'Service Platform Ready',
-                resultDesc: 'Tap below to access the CMMS platform.'
-            }
-        };
-
-        // Initialize Tesseract worker on page load
-        async function initTesseract() {
-            try {
-                tesseractWorker = await Tesseract.createWorker('eng', 1, {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const progress = Math.round(m.progress * 100);
-                            document.getElementById('ocr-progress').textContent = `Reading text: ${progress}%`;
-                        }
-                    }
-                });
-                console.log('Tesseract initialized');
-            } catch (err) {
-                console.error('Tesseract init error:', err);
-            }
+        // Parse URL parameters
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                assetId: params.get('asset'),
+                tandemUrl: params.get('tandem')
+            };
         }
 
-        // Start loading Tesseract when page loads
-        initTesseract();
+        // Initialize the page
+        function init() {
+            const { assetId, tandemUrl } = getUrlParams();
 
-        function showView(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-        }
-
-        function showMenu() {
-            stopScanner();
-            currentMode = null;
-            showView('menu-view');
-        }
-
-        function goBack() {
-            if (document.getElementById('result-view').classList.contains('active')) {
-                showView('scanner-view');
-                startQrScanner();
+            if (assetId && tandemUrl) {
+                // Asset info found in URL - show options
+                showOptionsView(assetId, tandemUrl);
             } else {
-                stopScanner();
-                showView('menu-view');
+                // No asset info - show instructions
+                showNoAssetView();
             }
         }
 
-        function startScanner(mode) {
-            currentMode = mode;
-            const config = modes[mode];
-            
-            document.getElementById('scanner-mode-text').textContent = `Mode: ${config.title}`;
-            document.getElementById('mode-indicator').innerHTML = 
-                `<span class="mode-badge ${config.badge}">${config.title}</span>`;
-            document.getElementById('status-container').innerHTML = '';
-            
-            showView('scanner-view');
-            startQrScanner();
+        // Show the options view with asset info
+        function showOptionsView(assetId, tandemUrl) {
+            // Update display
+            document.getElementById('display-asset-id').textContent = assetId;
+            document.getElementById('display-tandem-link').textContent = truncateUrl(tandemUrl, 50);
+
+            // Set up maintenance email button
+            const maintenanceBtn = document.getElementById('btn-maintenance');
+            const subject = encodeURIComponent(`Maintenance Issue - ${assetId}`);
+            const body = encodeURIComponent(
+                `Hello Maintenance Team,\n\n` +
+                `I would like to report an issue with the following asset:\n\n` +
+                `Asset ID: ${assetId}\n` +
+                `View Asset: ${tandemUrl}\n\n` +
+                `Issue Description:\n[Please describe the issue]\n\n` +
+                `Location:\n[Building/Floor/Room]\n\n` +
+                `Thank you.`
+            );
+            maintenanceBtn.href = `mailto:maintenance@ABChealthcare.com?subject=${subject}&body=${body}`;
+
+            // Set up portal button (direct link to Tandem)
+            document.getElementById('btn-portal').href = tandemUrl;
+
+            // Set up service platform button
+            document.getElementById('btn-service').href = 
+                `https://td-external.tririga.com/login?asset=${encodeURIComponent(assetId)}`;
+
+            // Show the view
+            document.getElementById('options-view').classList.add('active');
+            document.getElementById('no-asset-view').classList.remove('active');
         }
 
-        function startQrScanner() {
-            const qrReaderDiv = document.getElementById('qr-reader');
-            qrReaderDiv.innerHTML = '';
-            
-            html5QrCode = new Html5Qrcode("qr-reader");
-            
-            html5QrCode.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.0
-                },
-                onScanSuccess,
-                onScanError
-            ).then(() => {
-                console.log("Scanner started");
-                showStatus("Camera active. Point at QR code with label visible.", "success");
-                videoElement = document.querySelector('#qr-reader video');
-            }).catch(err => {
-                console.error("Scanner failed:", err);
-                showStatus("Camera unavailable. Use manual entry below.", "error");
-            });
+        // Show the no-asset instructions view
+        function showNoAssetView() {
+            document.getElementById('no-asset-view').classList.add('active');
+            document.getElementById('options-view').classList.remove('active');
         }
 
-        function stopScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(err => console.log("Stop error:", err));
-                html5QrCode = null;
-            }
-            videoElement = null;
+        // Helper to truncate long URLs for display
+        function truncateUrl(url, maxLength) {
+            if (url.length <= maxLength) return url;
+            return url.substring(0, maxLength) + '...';
         }
 
-        function showStatus(message, type) {
-            document.getElementById('status-container').innerHTML = 
-                `<div class="status-message ${type}">${message}</div>`;
-        }
-
-        async function onScanSuccess(decodedText, decodedResult) {
-            console.log("QR Scanned:", decodedText);
-            
-            const imageData = captureFrame();
-            stopScanner();
-            
-            showView('processing-view');
-            document.getElementById('processing-text').textContent = 'QR code detected! Reading asset ID...';
-            document.getElementById('ocr-progress').textContent = 'Initializing OCR...';
-            
-            let assetId = await runOCR(imageData);
-            
-            if (!assetId || assetId === 'UNKNOWN') {
-                assetId = extractAssetIdFromUrl(decodedText);
-            }
-            
-            processResult(assetId, decodedText);
-        }
-
-        function onScanError(error) {
-            // Silent - keep scanning
-        }
-
-        function captureFrame() {
-            if (!videoElement) return null;
-            
-            const canvas = document.getElementById('ocr-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            ctx.drawImage(videoElement, 0, 0);
-            
-            return canvas.toDataURL('image/png');
-        }
-
-        async function runOCR(imageData) {
-            if (!imageData || !tesseractWorker) {
-                console.log('No image data or Tesseract not ready');
-                return 'UNKNOWN';
-            }
-            
-            try {
-                document.getElementById('ocr-progress').textContent = 'Analyzing image...';
-                
-                const result = await tesseractWorker.recognize(imageData);
-                const text = result.data.text;
-                
-                console.log('OCR Raw Text:', text);
-                
-                // Look for asset ID patterns like CAM.E1879-A.01
-                const patterns = [
-                    /[A-Z]{2,4}\.[A-Z]?\d{3,5}-[A-Z]-?\d{1,2}/gi,
-                    /[A-Z]{2,4}\.[A-Z]?\d{3,5}-[A-Z]\.\d{1,2}/gi,
-                    /[A-Z]{2,4}[.\-][A-Z0-9]{3,10}[.\-][A-Z0-9.\-]+/gi,
-                ];
-                
-                for (const pattern of patterns) {
-                    const matches = text.match(pattern);
-                    if (matches && matches.length > 0) {
-                        let assetId = matches[0].trim().toUpperCase();
-                        console.log('Found Asset ID:', assetId);
-                        return assetId;
-                    }
-                }
-                
-                const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                for (const line of lines) {
-                    if (/^[A-Z0-9][A-Z0-9.\-]{5,20}$/i.test(line)) {
-                        console.log('Found potential Asset ID:', line);
-                        return line.toUpperCase();
-                    }
-                }
-                
-                return 'UNKNOWN';
-            } catch (err) {
-                console.error('OCR Error:', err);
-                return 'UNKNOWN';
-            }
-        }
-
-        function extractAssetIdFromUrl(url) {
-            if (url.includes('|')) {
-                return url.split('|')[0].trim();
-            }
-            
-            const selectionMatch = url.match(/selection=([^&]+)/);
-            if (selectionMatch) {
-                return 'REF-' + selectionMatch[1].substring(0, 12);
-            }
-            
-            return 'UNKNOWN';
-        }
-
-        function extractUrl(data) {
-            if (data.includes('|')) {
-                return data.split('|')[1].trim();
-            }
-            return data;
-        }
-
-        function simulateScan() {
-            const assetId = document.getElementById('demo-asset').value.trim();
-            const url = document.getElementById('demo-url').value.trim();
-            
-            if (!url) {
-                showStatus("Please enter at least a URL.", "error");
-                return;
-            }
-            
-            stopScanner();
-            processResult(assetId || 'MANUAL-ENTRY', url);
-        }
-
-        function processResult(assetId, sourceUrl) {
-            showView('processing-view');
-            document.getElementById('processing-text').textContent = 'Preparing action...';
-            document.getElementById('ocr-progress').textContent = '';
-            
-            const cleanUrl = extractUrl(sourceUrl);
-            
-            setTimeout(() => {
-                prepareResult(assetId, cleanUrl);
-            }, 500);
-        }
-
-        function prepareResult(assetId, sourceUrl) {
-            const config = modes[currentMode];
-            let actionUrl = '';
-            let buttonText = '';
-            
-            switch (currentMode) {
-                case 'maintenance':
-                    const subject = encodeURIComponent(`Maintenance Issue - ${assetId}`);
-                    const body = encodeURIComponent(
-                        `Hello Maintenance Team,\n\n` +
-                        `I would like to report an issue with the following asset:\n\n` +
-                        `Asset ID: ${assetId}\n` +
-                        `View Asset: ${sourceUrl}\n\n` +
-                        `Issue Description:\n[Please describe the issue]\n\n` +
-                        `Location:\n[Building/Floor/Room]\n\n` +
-                        `Thank you.`
-                    );
-                    actionUrl = `mailto:maintenance@ABChealthcare.com?subject=${subject}&body=${body}`;
-                    buttonText = 'Open Email';
-                    break;
-                    
-                case 'portal':
-                    actionUrl = sourceUrl;
-                    buttonText = 'Open in Tandem';
-                    break;
-                    
-                case 'service':
-                    actionUrl = `https://td-external.tririga.com/login?asset=${encodeURIComponent(assetId)}`;
-                    buttonText = 'Open Tririga';
-                    break;
-            }
-            
-            document.getElementById('result-title').textContent = config.resultTitle;
-            document.getElementById('result-desc').textContent = config.resultDesc;
-            document.getElementById('result-asset-id').textContent = assetId;
-            document.getElementById('result-action').textContent = config.action;
-            
-            const actionLink = document.getElementById('action-link');
-            actionLink.href = actionUrl;
-            actionLink.textContent = buttonText;
-            actionLink.target = currentMode === 'maintenance' ? '_self' : '_blank';
-            
-            showView('result-view');
-        }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
