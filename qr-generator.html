@@ -869,55 +869,90 @@ HVAC.B2201-C.05, https://tandem.autodesk.com/pages/facilities/..."></textarea>
             }
 
             const lines = batchData.split('\n').filter(line => line.trim());
+            
+            if (lines.length === 0) {
+                alert('No valid data found');
+                return;
+            }
+            
             batchQRData = [];
             
             const resultsContainer = document.getElementById('batch-results');
             resultsContainer.innerHTML = '';
+            
+            let successCount = 0;
 
             for (const line of lines) {
-                const parts = line.split(',').map(p => p.trim());
-                if (parts.length < 2) continue;
+                // Handle both comma and tab delimiters (Excel sometimes uses tabs)
+                let parts;
+                if (line.includes('\t')) {
+                    parts = line.split('\t').map(p => p.trim());
+                } else {
+                    parts = line.split(',').map(p => p.trim());
+                }
+                
+                // Skip if we don't have at least 2 parts
+                if (parts.length < 2 || !parts[0] || !parts[1]) {
+                    console.log('Skipping invalid line:', line);
+                    continue;
+                }
 
-                const assetId = parts[0];
+                const assetId = parts[0].trim();
                 const tandemUrl = parts.slice(1).join(',').trim(); // In case URL has commas
+                
+                // Skip if either value is empty
+                if (!assetId || !tandemUrl) {
+                    console.log('Skipping empty values:', assetId, tandemUrl);
+                    continue;
+                }
+                
                 const fullUrl = buildPortalUrl(assetId, tandemUrl);
 
-                // Create container
-                const item = document.createElement('div');
-                item.className = 'batch-item';
+                try {
+                    // Create container
+                    const item = document.createElement('div');
+                    item.className = 'batch-item';
 
-                // Create canvas
-                const canvas = document.createElement('canvas');
-                await QRCode.toCanvas(canvas, fullUrl, {
-                    width: 150,
-                    margin: 2,
-                    color: {
-                        dark: '#0f172a',
-                        light: '#ffffff'
-                    }
-                });
+                    // Create canvas
+                    const canvas = document.createElement('canvas');
+                    await QRCode.toCanvas(canvas, fullUrl, {
+                        width: 150,
+                        margin: 2,
+                        color: {
+                            dark: '#0f172a',
+                            light: '#ffffff'
+                        }
+                    });
 
-                // Label
-                const label = document.createElement('div');
-                label.className = 'batch-item-label';
-                label.textContent = assetId;
+                    // Label
+                    const label = document.createElement('div');
+                    label.className = 'batch-item-label';
+                    label.textContent = assetId;
 
-                // Download button
-                const downloadBtn = document.createElement('button');
-                downloadBtn.className = 'batch-item-download';
-                downloadBtn.textContent = 'Download';
-                downloadBtn.onclick = () => downloadBatchItem(assetId, canvas);
+                    // Download button
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'batch-item-download';
+                    downloadBtn.textContent = 'Download';
+                    downloadBtn.onclick = () => downloadBatchItem(assetId, canvas);
 
-                item.appendChild(canvas);
-                item.appendChild(label);
-                item.appendChild(downloadBtn);
-                resultsContainer.appendChild(item);
+                    item.appendChild(canvas);
+                    item.appendChild(label);
+                    item.appendChild(downloadBtn);
+                    resultsContainer.appendChild(item);
 
-                // Store for batch download
-                batchQRData.push({ assetId, canvas, fullUrl });
+                    // Store for batch download
+                    batchQRData.push({ assetId, canvas, fullUrl });
+                    successCount++;
+                } catch (err) {
+                    console.error('Error generating QR for:', assetId, err);
+                }
             }
 
-            document.getElementById('batch-output').classList.add('active');
+            if (successCount > 0) {
+                document.getElementById('batch-output').classList.add('active');
+            } else {
+                alert('No QR codes could be generated. Please check your data format.\n\nExpected format:\nAssetID, TandemURL');
+            }
         }
 
         // Download single batch item
