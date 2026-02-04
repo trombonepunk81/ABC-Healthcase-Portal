@@ -177,30 +177,48 @@ var qrcode=function(){var qrcode=function(typeNumber,errorCorrectionLevel){var P
         }
 
         function buildUrl(assetId, tandemUrl) {
+            // Don't encode the tandem URL - it's already a valid URL
+            // Just encode the asset ID in case it has special characters
             return PORTAL_URL + '?asset=' + encodeURIComponent(assetId) + '&tandem=' + encodeURIComponent(tandemUrl);
+        }
+        
+        // For QR codes, we want the raw URL without heavy encoding
+        function buildQRUrl(assetId, tandemUrl) {
+            // Minimal encoding - just the asset ID for safety, tandem URL as-is
+            return PORTAL_URL + '?asset=' + encodeURIComponent(assetId) + '&tandem=' + tandemUrl;
         }
 
         function createQRCanvas(text, cellSize) {
-            cellSize = cellSize || 5;  // Increased default size
+            cellSize = cellSize || 5;
             
             // Type 0 = auto-detect, 'L' = low error correction (max capacity)
             var qr = qrcode(0, 'L');
             qr.addData(text);
             qr.make();
             
+            // Use the library's built-in image generation
+            var dataUrl = qr.createDataURL(cellSize, cellSize * 4);
+            
+            // Create an image element and convert to canvas
+            var img = new window.Image();
+            var canvas = document.createElement('canvas');
+            
+            // We need to return synchronously, so use createImgTag approach
             var moduleCount = qr.getModuleCount();
-            var margin = cellSize * 4;  // Add quiet zone (white margin)
+            var margin = cellSize * 4;
             var size = moduleCount * cellSize + margin * 2;
             
-            var canvas = document.createElement('canvas');
             canvas.width = size;
             canvas.height = size;
             
             var ctx = canvas.getContext('2d');
+            
+            // Draw white background
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, size, size);
-            ctx.fillStyle = '#000000';  // Pure black for better contrast
             
+            // Draw QR modules
+            ctx.fillStyle = '#000000';
             for (var row = 0; row < moduleCount; row++) {
                 for (var col = 0; col < moduleCount; col++) {
                     if (qr.isDark(row, col)) {
@@ -214,7 +232,23 @@ var qrcode=function(){var qrcode=function(typeNumber,errorCorrectionLevel){var P
                 }
             }
             
+            // Store the data URL for verification
+            canvas.setAttribute('data-url', text);
+            
             return canvas;
+        }
+        
+        // Alternative: Create QR as image element using library's built-in method
+        function createQRImage(text, cellSize) {
+            cellSize = cellSize || 5;
+            var qr = qrcode(0, 'L');
+            qr.addData(text);
+            qr.make();
+            
+            var img = document.createElement('img');
+            img.src = qr.createDataURL(cellSize, cellSize * 4);
+            img.setAttribute('data-url', text);
+            return img;
         }
 
         function generateSingleQR() {
@@ -229,7 +263,7 @@ var qrcode=function(){var qrcode=function(typeNumber,errorCorrectionLevel){var P
                 return;
             }
 
-            var fullUrl = buildUrl(assetId, tandemUrl);
+            var fullUrl = buildQRUrl(assetId, tandemUrl);  // Use non-encoded version for QR
             log('debug-single', 'URL length: ' + fullUrl.length);
 
             try {
@@ -378,7 +412,7 @@ var qrcode=function(){var qrcode=function(typeNumber,errorCorrectionLevel){var P
 
                 var assetId = parts[0];
                 var tandemUrl = parts.slice(1).join(',').trim();
-                var fullUrl = buildUrl(assetId, tandemUrl);
+                var fullUrl = buildQRUrl(assetId, tandemUrl);  // Use non-encoded version for QR
                 
                 log('debug-batch', 'Asset: ' + assetId + ', URL len: ' + fullUrl.length);
 
