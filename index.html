@@ -635,15 +635,42 @@
         // Parse URL parameters
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
+            let assetId = params.get('asset');
+            let tandemUrl = params.get('tandem');
+            
+            // The tandem URL might have its own query parameters that got split
+            // We need to reconstruct them
+            if (tandemUrl) {
+                // Get the full URL and extract everything after 'tandem='
+                const fullUrl = window.location.href;
+                const tandemIndex = fullUrl.indexOf('tandem=');
+                if (tandemIndex !== -1) {
+                    // Get everything after 'tandem='
+                    tandemUrl = fullUrl.substring(tandemIndex + 7);
+                    // Decode if it was URL encoded
+                    try {
+                        // Check if it looks encoded (contains %3A or %2F)
+                        if (tandemUrl.includes('%3A') || tandemUrl.includes('%2F')) {
+                            tandemUrl = decodeURIComponent(tandemUrl);
+                        }
+                    } catch (e) {
+                        console.log('URL decode not needed');
+                    }
+                }
+            }
+            
             return {
-                assetId: params.get('asset'),
-                tandemUrl: params.get('tandem')
+                assetId: assetId,
+                tandemUrl: tandemUrl
             };
         }
 
         // Initialize the page
         function init() {
             const { assetId, tandemUrl } = getUrlParams();
+            
+            console.log('Asset ID:', assetId);
+            console.log('Tandem URL:', tandemUrl);
 
             if (assetId && tandemUrl) {
                 // Asset info found in URL - show options
