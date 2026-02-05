@@ -35,9 +35,11 @@
         .status-bar.success { background: #dcfce7; color: #166534; }
         .status-bar.error { background: #fef2f2; color: #dc2626; }
         .status-bar.loading { background: #fef3c7; color: #92400e; }
+        .status-bar.info { background: #dbeafe; color: #1e40af; }
         .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .tab { padding: 0.625rem 1.25rem; border: 1px solid var(--slate-200); border-radius: 8px; background: white; cursor: pointer; font-family: inherit; font-size: 0.9rem; transition: all 0.2s; }
         .tab.active { background: var(--slate-800); color: white; border-color: var(--slate-800); }
+        .tab.disabled { opacity: 0.5; cursor: not-allowed; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -74,6 +76,7 @@
         .connect-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--teal-600), var(--teal-500)); color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .connect-btn:hover { transform: translateY(-1px); }
         .connect-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .logout-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border: 1px solid var(--slate-200); border-radius: 8px; background: white; color: var(--slate-600); cursor: pointer; font-size: 0.85rem; margin-bottom: 1rem; }
         .asset-search { width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 0.95rem; margin-bottom: 1rem; }
         .asset-list { max-height: 400px; overflow-y: auto; border: 1px solid var(--slate-200); border-radius: 10px; margin-bottom: 1rem; }
         .asset-item { padding: 1rem; border-bottom: 1px solid var(--slate-200); cursor: pointer; transition: background 0.2s; }
@@ -86,10 +89,7 @@
         .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--slate-200); border-top-color: var(--teal-500); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .info-banner { background: rgba(20, 184, 166, 0.05); border-left: 3px solid var(--teal-500); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
-        .debug-console { background: #1e293b; color: #10b981; padding: 1rem; border-radius: 10px; font-family: monospace; font-size: 0.75rem; margin-top: 1rem; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
-        .debug-console .error { color: #ef4444; }
-        .debug-console .success { color: #10b981; }
-        .debug-console .info { color: #3b82f6; }
+        .warning-banner { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -106,14 +106,14 @@
             <div class="tabs">
                 <button class="tab active" onclick="switchTab('single')">Single QR Code</button>
                 <button class="tab" onclick="switchTab('batch')">Batch Generate</button>
-                <button class="tab" onclick="switchTab('tandem')">🔗 Tandem Connect</button>
+                <button class="tab disabled" id="tandem-tab" title="Sign in with Tandem to enable">🔗 Tandem Connect</button>
             </div>
 
             <!-- SINGLE QR TAB -->
             <div id="single-tab" class="tab-content active">
                 <div class="form-group">
                     <label class="form-label">Asset ID</label>
-                    <input type="text" id="asset-id" class="form-input" placeholder="e.g., CAM.E1879-A.01">
+                    <input type="text" id="asset-id" class="form-input" placeholder="e.g., CAM.E1879.01">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Tandem URL</label>
@@ -139,7 +139,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Asset Data (one per line: AssetID, TandemURL)</label>
-                    <textarea id="batch-data" class="batch-textarea" placeholder="CAM.E1879-A.01, https://tandem.autodesk.com/...&#10;AHU.B2301-C.05, https://tandem.autodesk.com/..."></textarea>
+                    <textarea id="batch-data" class="batch-textarea" placeholder="CAM.E1879.01, https://tandem.autodesk.com/...&#10;AHU.B2301.05, https://tandem.autodesk.com/..."></textarea>
                 </div>
                 <button class="generate-btn" id="batch-gen-btn" onclick="generateBatchQR()" disabled>Generate All QR Codes</button>
                 <div id="batch-output" class="output-section">
@@ -149,40 +149,14 @@
             </div>
 
             <!-- TANDEM CONNECT TAB -->
-            <div id="tandem-tab" class="tab-content">
-                <div class="info-banner">
-                    💡 Connect to your Tandem facility to browse and select assets, then generate QR codes with their Tandem URLs automatically.
+            <div id="tandem-tab-content" class="tab-content">
+                <div class="warning-banner">
+                    ⚠️ <strong>Tandem Connect is currently disabled.</strong> This feature requires server-side authentication for security. Please use the manual entry or batch generate options instead.
                 </div>
                 
-                <div id="tandem-connect-section">
-                    <button class="connect-btn" id="connect-btn" onclick="connectToTandem()">
-                        <span id="connect-btn-icon">🔌</span>
-                        <span id="connect-btn-text">Connect to Tandem</span>
-                    </button>
-                    
-                    <div id="tandem-debug" class="debug-console" style="display: none;"></div>
-                </div>
-
-                <div id="tandem-assets-section" style="display: none;">
-                    <div class="form-group">
-                        <label class="form-label">Search Assets</label>
-                        <input type="text" id="asset-search" class="asset-search" placeholder="Search by Asset ID or name..." oninput="filterAssets()">
-                    </div>
-
-                    <div id="selected-count-display" style="display: none;">
-                        <span class="selected-count"><span id="selected-count">0</span> assets selected</span>
-                    </div>
-
-                    <div id="asset-list" class="asset-list">
-                        <!-- Assets will be populated here -->
-                    </div>
-
-                    <button class="generate-btn" id="tandem-gen-btn" onclick="generateFromTandem()" disabled>Generate QR Codes for Selected Assets</button>
-
-                    <div id="tandem-output" class="output-section">
-                        <button class="download-btn" onclick="downloadAllZip()">Download All (ZIP)</button>
-                        <div id="tandem-results" class="batch-results"></div>
-                    </div>
+                <div class="info-banner">
+                    💡 <strong>Why is this disabled?</strong><br>
+                    To protect your Tandem credentials, we cannot authenticate directly from the browser. Contact your administrator to set up a secure backend proxy if you need this feature.
                 </div>
             </div>
         </div>
@@ -203,45 +177,6 @@
         var currentQR = null;
         var batchQRs = [];
         var qrLibraryLoaded = false;
-
-        // Tandem API Configuration
-        var TANDEM_CONFIG = {
-            clientId: 'Fmc6YKO9VQhtAh4fY2EcnUc4baqeAzMwf3c98rvzoATyN9WM',
-            clientSecret: 'nzQcRS9bA2hTO7HwJRyRvvG9rLlB9XCWHfBIHHGsnXPtHZI2pZ7G2ypYXkgZ6vpb',
-            keyId: 'ba3aa278-2075-4d97-92ca-bd776627256e',
-            facilityId: 'urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw',
-            privateKey: `-----BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEAzbbXLNp8KxaPUC0dvkd0EHV5mcaQfymq++OXUpRkEsDjgV7n
-KYPWRbmKQ97TFDg6DXOKb7XzcDcKIKaXn6GA9S9EF304ijpqYupkiUe+C1ANyOSh
-El0TKxXX2GtR+UL4RUjhP94nNaXXXctszurDGK8eih+8HjsvZw1sKlauT6gnLJzY
-l/ctzGRg83Ao2oGfUmBGgcRC+ZDxTYkguMlPjIh3cGJTdLJtmOMXS6meAWdvr3+Z
-smF5BHpWNwSLEbHKltjzCmANDnGzZIBlYntzE+OBanuVZ6u8WR3Z/KBLvtYpiLgx
-iKRdkI5hFEjYUMDMCVIHsr8U5j8+JTlMMycaAwIDAQABAoIBAEpljTU6APz+SC85
-Wc/mfIm1Sph8EOcEVUOKoD/rzbNgkgbIITbI6LXHr8Ly84iU+x3BQvg6qANVzHJZ
-fW1sVbyWbvxFu6x2CuKiHWDuksL5nTqhwMTo51VGLY0l5vwMJci83kWgXLLQuu4/
-cyb0DUHAl31hk8GlKvQMjSlUtu60XaU8vN3bS6Pagwst69yaw5rO9E3uycZLDXN6
-e/uEb1pydT/5jODXEpcL3SVO5EoaJKTh2nR08TM8u/laPUvVf/VQaH+4W+FOyBT/
-aLNyt4ESydgrw3DE4uyJxcxxh/3UzcJGvAdeDtABJzgDmbwSFAawds1GRzxhZvz6
-LfxUa6UCgYEA9sfy7qSxHikQIRCBSEoUgHlpQYoGCIahwoHR8B5y9XLxnrWSZLzq
-6ixVWbelx8HXojvnSN40PRWZDRLWQmzTjAR3/Qvhgh7emb+YgjVAVEHu2mV+btAC
-5fsgeeF7Fa8W0wtK+uyJaXZRCVXBeSIUhVH2P0QHLuMDx6kt238Oh4cCgYEA1WYn
-0Iz7I9Qw8pTkDd0BBvXXPHmu/cM8ekBRisJDnRVqrHvxFnd+B40q9Te7Fe+81a0d
-omDh6sGY9x4Y92SF+xmU7pVPbXrNnwc0slSnzla2isk98HqiOZ5Ovx1fSJINjWbB
-YHkvSNMsvp3aMPPBaEhqhsKC/VoU55gOJtXYQKUCgYBZk/jVsUhth0BIkEItaF6K
-yAdx99T60Uv0W8VF4PefquqTzprmIEExYYhVubjeirloNVBd/fJ+XdGhkj3d/LzJ
-bXHUk7R21Be/PXHxibzhGNHHyuGa/byfmImQVE2mcFjboJTGAohalM0Tk2JYQwup
-3TeCfYIR/euIVRvFOhifDwKBgCfNph+ALFfCfF7C5savMkHaGQtupvUuNVmYJZ18
-HqBuHjeN5qoKH7fI3PpgKsUsskwovh5Lc9gVxDJTqtR6K4Nqghz+PJJvFWtULMAW
-ijYydlnsr2DrftbAcG+1StB+bYiyYd9cuzUaLn5fcxMuZCTPXQ9FuKkI5F1OP1V/
-DZcBAoGBALcBwnxMHxtNemmoI7D8L34Yi5hFMLFwE7GcXkHTE3dg+r0kofYRyiLJ
-uaBumsSrT2VW0LrtXF/BQ8hwY0szfrmyJi5BAkoA7SWtk4zYwltxmIUuLjDWErhr
-7awNNEXgEk6Xs3UCQ8XLhwUTVVysLOdV1+3tRk+BFnVPSJYNETsH
------END RSA PRIVATE KEY-----`
-        };
-
-        var tandemAccessToken = null;
-        var tandemAssets = [];
-        var selectedAssets = new Set();
 
         // Check if QRCode library loaded
         window.addEventListener('DOMContentLoaded', function() {
@@ -275,7 +210,7 @@ uaBumsSrT2VW0LrtXF/BQ8hwY0szfrmyJi5BAkoA7SWtk4zYwltxmIUuLjDWErhr
                 document.getElementById('batch-tab').classList.add('active');
             } else if (tabName === 'tandem') {
                 tabs[2].classList.add('active');
-                document.getElementById('tandem-tab').classList.add('active');
+                document.getElementById('tandem-tab-content').classList.add('active');
             }
         }
 
@@ -381,7 +316,7 @@ uaBumsSrT2VW0LrtXF/BQ8hwY0szfrmyJi5BAkoA7SWtk4zYwltxmIUuLjDWErhr
         }
 
         function downloadTemplate() {
-            var template = 'AssetID,TandemURL\nCAM.E1879-A.01,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...\nAHU.B2301-C.05,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...';
+            var template = 'AssetID,TandemURL\nCAM.E1879.01,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...\nAHU.B2301.05,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...';
             var blob = new Blob([template], { type: 'text/csv' });
             var link = document.createElement('a');
             link.download = 'ABC-Healthcare-QR-Template.csv';
@@ -537,347 +472,6 @@ uaBumsSrT2VW0LrtXF/BQ8hwY0szfrmyJi5BAkoA7SWtk4zYwltxmIUuLjDWErhr
                 link.href = URL.createObjectURL(blob);
                 link.click();
             });
-        }
-
-        // ==================== TANDEM CONNECT ====================
-        function debugLog(message, type = 'info') {
-            var debugConsole = document.getElementById('tandem-debug');
-            debugConsole.style.display = 'block';
-            
-            var timestamp = new Date().toLocaleTimeString();
-            var className = type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info');
-            var prefix = type === 'error' ? '❌' : (type === 'success' ? '✓' : '→');
-            
-            var line = document.createElement('div');
-            line.className = className;
-            line.textContent = `[${timestamp}] ${prefix} ${message}`;
-            debugConsole.appendChild(line);
-            debugConsole.scrollTop = debugConsole.scrollHeight;
-            
-            console.log(`[Tandem] ${message}`);
-        }
-
-        async function connectToTandem() {
-            var btn = document.getElementById('connect-btn');
-            var icon = document.getElementById('connect-btn-icon');
-            var text = document.getElementById('connect-btn-text');
-            var status = document.getElementById('status-bar');
-            
-            // Clear previous debug logs
-            document.getElementById('tandem-debug').innerHTML = '';
-            
-            btn.disabled = true;
-            icon.innerHTML = '<span class="loading-spinner"></span>';
-            text.textContent = 'Connecting...';
-            status.textContent = 'Connecting to Tandem...';
-            status.className = 'status-bar loading';
-
-            debugLog('=== STARTING TANDEM CONNECTION ===');
-            debugLog('Client ID: ' + TANDEM_CONFIG.clientId.substring(0, 20) + '...');
-            debugLog('Facility ID: ' + TANDEM_CONFIG.facilityId);
-
-            try {
-                // Step 1: Get Access Token
-                debugLog('Step 1: Requesting OAuth token...');
-                tandemAccessToken = await getTandemAccessToken();
-                debugLog('Authentication successful! Token received.', 'success');
-                debugLog('Token (first 20 chars): ' + tandemAccessToken.substring(0, 20) + '...');
-
-                // Step 2: Fetch Assets
-                status.textContent = 'Fetching assets from facility...';
-                debugLog('Step 2: Fetching assets from facility...');
-                tandemAssets = await getTandemAssets();
-                debugLog('Found ' + tandemAssets.length + ' assets', 'success');
-
-                // Step 3: Display Assets
-                debugLog('Step 3: Displaying assets...');
-                displayAssets(tandemAssets);
-                
-                // Update UI
-                status.textContent = '✓ Connected! Found ' + tandemAssets.length + ' assets';
-                status.className = 'status-bar success';
-                document.getElementById('tandem-connect-section').style.display = 'none';
-                document.getElementById('tandem-assets-section').style.display = 'block';
-                debugLog('=== CONNECTION COMPLETE ===', 'success');
-
-            } catch (error) {
-                debugLog('CONNECTION FAILED: ' + error.message, 'error');
-                debugLog('Error details: ' + JSON.stringify(error), 'error');
-                console.error('Tandem connection error:', error);
-                
-                status.textContent = '✗ Connection failed: ' + error.message;
-                status.className = 'status-bar error';
-                btn.disabled = false;
-                icon.textContent = '🔌';
-                text.textContent = 'Retry Connection';
-            }
-        }
-
-        async function getTandemAccessToken() {
-            debugLog('Preparing OAuth request...');
-            
-            // Using 2-legged OAuth (Client Credentials)
-            var tokenUrl = 'https://developer.api.autodesk.com/authentication/v2/token';
-            debugLog('Token URL: ' + tokenUrl);
-            
-            var body = new URLSearchParams({
-                grant_type: 'client_credentials',
-                scope: 'data:read'
-            });
-            debugLog('Grant type: client_credentials, Scope: data:read');
-
-            var credentials = btoa(TANDEM_CONFIG.clientId + ':' + TANDEM_CONFIG.clientSecret);
-            debugLog('Credentials encoded (Base64)');
-
-            debugLog('Sending POST request to Autodesk...');
-            var response = await fetch(tokenUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + credentials
-                },
-                body: body
-            });
-
-            debugLog('Response status: ' + response.status + ' ' + response.statusText);
-
-            if (!response.ok) {
-                var errorText = await response.text();
-                debugLog('Error response body: ' + errorText, 'error');
-                throw new Error('Authentication failed: ' + response.statusText + ' - ' + errorText);
-            }
-
-            var data = await response.json();
-            debugLog('Token response received successfully', 'success');
-            return data.access_token;
-        }
-
-        async function getTandemAssets() {
-            debugLog('Preparing asset fetch request...');
-            
-            // Tandem API endpoint to get facility elements
-            var facilityUrn = TANDEM_CONFIG.facilityId;
-            debugLog('Facility URN: ' + facilityUrn);
-            
-            // We'll query the Tandem API for elements in the facility
-            var apiUrl = 'https://developer.api.autodesk.com/tandem/v1/twins/' + encodeURIComponent(facilityUrn) + '/elements';
-            debugLog('API URL: ' + apiUrl);
-
-            debugLog('Sending GET request for assets...');
-            var response = await fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + tandemAccessToken,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            debugLog('Response status: ' + response.status + ' ' + response.statusText);
-
-            if (!response.ok) {
-                var errorText = await response.text();
-                debugLog('Error response body: ' + errorText, 'error');
-                throw new Error('Failed to fetch assets: ' + response.statusText + ' - ' + errorText);
-            }
-
-            var data = await response.json();
-            debugLog('Asset data received, parsing...');
-            debugLog('Response keys: ' + Object.keys(data).join(', '));
-            
-            // Process the response to extract asset information
-            // The actual structure depends on Tandem's API response
-            var assets = [];
-            
-            if (data.results && Array.isArray(data.results)) {
-                debugLog('Found results array with ' + data.results.length + ' items');
-                assets = data.results.map(function(element, index) {
-                    // Extract relevant properties
-                    var elementId = element.e || element.id || ('element-' + index);
-                    var properties = element.p || {};
-                    
-                    // Try to find asset ID from properties
-                    var assetId = properties['Asset ID'] || 
-                                  properties['Tag'] || 
-                                  properties['Name'] || 
-                                  elementId;
-                    
-                    // Build Tandem URL for this element
-                    var tandemUrl = buildTandemUrl(facilityUrn, elementId);
-                    
-                    return {
-                        id: elementId,
-                        assetId: assetId,
-                        name: properties['Name'] || properties['Type'] || 'Unnamed Asset',
-                        tandemUrl: tandemUrl,
-                        properties: properties
-                    };
-                });
-                debugLog('Processed ' + assets.length + ' assets', 'success');
-            } else {
-                debugLog('No results array found in response', 'error');
-                debugLog('Data structure: ' + JSON.stringify(data).substring(0, 500), 'error');
-            }
-
-            return assets;
-        }
-
-        function buildTandemUrl(facilityUrn, elementId) {
-            // Build the proper Tandem URL format
-            var baseUrl = 'https://tandem.autodesk.com/pages/facilities';
-            var params = new URLSearchParams({
-                selection: facilityUrn + ':' + elementId,
-                selectionIndex: '0'
-            });
-            return baseUrl + '?' + params.toString();
-        }
-
-        function displayAssets(assets) {
-            var list = document.getElementById('asset-list');
-            list.innerHTML = '';
-
-            if (assets.length === 0) {
-                list.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--slate-400);">No assets found</div>';
-                return;
-            }
-
-            assets.forEach(function(asset, index) {
-                var item = document.createElement('div');
-                item.className = 'asset-item';
-                item.setAttribute('data-index', index);
-                item.onclick = function() {
-                    toggleAssetSelection(index);
-                };
-
-                var name = document.createElement('div');
-                name.className = 'asset-item-name';
-                name.textContent = asset.name;
-                item.appendChild(name);
-
-                var id = document.createElement('div');
-                id.className = 'asset-item-id';
-                id.textContent = asset.assetId;
-                item.appendChild(id);
-
-                list.appendChild(item);
-            });
-        }
-
-        function toggleAssetSelection(index) {
-            var item = document.querySelectorAll('.asset-item')[index];
-            
-            if (selectedAssets.has(index)) {
-                selectedAssets.delete(index);
-                item.classList.remove('selected');
-            } else {
-                selectedAssets.add(index);
-                item.classList.add('selected');
-            }
-
-            updateSelectedCount();
-        }
-
-        function updateSelectedCount() {
-            var count = selectedAssets.size;
-            var countDisplay = document.getElementById('selected-count-display');
-            var countText = document.getElementById('selected-count');
-            var genBtn = document.getElementById('tandem-gen-btn');
-
-            countText.textContent = count;
-            
-            if (count > 0) {
-                countDisplay.style.display = 'block';
-                genBtn.disabled = false;
-            } else {
-                countDisplay.style.display = 'none';
-                genBtn.disabled = true;
-            }
-        }
-
-        function filterAssets() {
-            var search = document.getElementById('asset-search').value.toLowerCase();
-            var items = document.querySelectorAll('.asset-item');
-
-            items.forEach(function(item, index) {
-                var asset = tandemAssets[index];
-                var searchText = (asset.assetId + ' ' + asset.name).toLowerCase();
-                
-                if (searchText.includes(search)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function generateFromTandem() {
-            if (selectedAssets.size === 0) {
-                alert('Please select at least one asset');
-                return;
-            }
-
-            var container = document.getElementById('tandem-results');
-            container.innerHTML = '';
-            batchQRs = [];
-
-            var selectedArray = Array.from(selectedAssets);
-            
-            selectedArray.forEach(function(assetIndex, qrIndex) {
-                var asset = tandemAssets[assetIndex];
-                var fullUrl = buildUrl(asset.assetId, asset.tandemUrl);
-
-                var div = document.createElement('div');
-                div.className = 'batch-item';
-
-                var qrDiv = document.createElement('div');
-                qrDiv.id = 'tandem-qr-' + qrIndex;
-                div.appendChild(qrDiv);
-
-                var label = document.createElement('div');
-                label.className = 'batch-item-label';
-                label.textContent = asset.assetId;
-                div.appendChild(label);
-
-                var btn = document.createElement('button');
-                btn.className = 'batch-item-download';
-                btn.textContent = 'Download';
-                btn.setAttribute('data-index', qrIndex);
-                btn.onclick = function() {
-                    downloadBatchItem(this.getAttribute('data-index'));
-                };
-                div.appendChild(btn);
-
-                container.appendChild(div);
-
-                try {
-                    new QRCode(qrDiv, {
-                        text: fullUrl,
-                        width: 180,
-                        height: 180,
-                        colorDark: '#000000',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.L
-                    });
-
-                    setTimeout(function() {
-                        var img = qrDiv.querySelector('img');
-                        var canvas = qrDiv.querySelector('canvas');
-                        batchQRs[qrIndex] = {
-                            assetId: asset.assetId,
-                            element: img || canvas
-                        };
-                    }, 50);
-
-                } catch (err) {
-                    console.error('Error generating QR for', asset.assetId, err);
-                    qrDiv.textContent = 'Error';
-                }
-            });
-
-            setTimeout(function() {
-                if (batchQRs.filter(Boolean).length > 0) {
-                    document.getElementById('tandem-output').classList.add('active');
-                }
-            }, 200);
         }
     </script>
 </body>
