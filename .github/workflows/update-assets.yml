@@ -1,5 +1,8 @@
 name: Update Assets from Tandem Connect
 
+permissions:
+  contents: write
+  
 on:
   repository_dispatch:
     types: [update-assets]
