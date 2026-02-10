@@ -54,7 +54,7 @@
         .import-section { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
         .import-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: 2px dashed var(--teal-400); border-radius: 10px; background: rgba(20,184,166,0.05); color: var(--teal-600); font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .import-btn:hover { background: rgba(20,184,166,0.1); }
-        .template-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid var(--slate-200); border-radius: 10px; background: white; color: var(--slate-600); cursor: pointer; transition: all 0.2s; }
+        .template-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid var(--slate-200); border-radius: 10px; background: white; color: var(--slate-600); cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.9rem; }
         .template-btn:hover { background: var(--slate-100); }
         .output-section { display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--slate-200); }
         .output-section.active { display: block; }
@@ -66,8 +66,10 @@
         .batch-item canvas { display: block; margin: 0 auto; }
         .batch-item-label { margin-top: 0.75rem; font-size: 0.85rem; font-weight: 600; }
         .batch-item-download { margin-top: 0.5rem; padding: 0.5rem 0.75rem; border: none; border-radius: 6px; background: var(--slate-100); cursor: pointer; font-size: 0.75rem; }
-        .download-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: none; border-radius: 10px; background: var(--slate-800); color: white; cursor: pointer; margin-bottom: 1rem; transition: all 0.2s; }
+        .download-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: none; border-radius: 10px; background: var(--slate-800); color: white; cursor: pointer; margin-right: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; font-family: inherit; font-size: 0.9rem; }
         .download-btn:hover { background: var(--slate-700); }
+        .download-btn.pdf { background: #dc2626; }
+        .download-btn.pdf:hover { background: #b91c1c; }
         .footer { text-align: center; padding: 2rem; color: var(--slate-400); font-size: 0.8rem; }
         .footer a { color: var(--slate-400); text-decoration: none; }
         .footer a:hover { color: var(--teal-400); }
@@ -86,7 +88,7 @@
         .asset-item-meta { font-size: 0.8rem; color: var(--slate-500); margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .asset-item-meta span { background: var(--slate-100); padding: 0.15rem 0.5rem; border-radius: 4px; }
         .asset-item-meta .category-tag { background: rgba(20, 184, 166, 0.15); color: var(--teal-600); }
-        .selected-count { display: inline-block; background: var(--teal-500); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+        .selected-count { display: inline-block; background: var(--teal-500); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-right: 1rem; }
         .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--slate-200); border-top-color: var(--teal-500); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .info-banner { background: rgba(20, 184, 166, 0.05); border-left: 3px solid var(--teal-500); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
@@ -234,6 +236,38 @@
             flex-wrap: wrap;
             align-items: center;
         }
+        
+        /* Download options */
+        .download-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--slate-200);
+        }
+        
+        /* PDF Grid Options */
+        .pdf-options {
+            display: none;
+            background: var(--slate-100);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .pdf-options.active { display: block; }
+        .pdf-options label {
+            font-size: 0.85rem;
+            color: var(--slate-600);
+            margin-right: 0.5rem;
+        }
+        .pdf-options select {
+            padding: 0.5rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-family: inherit;
+            margin-right: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -270,7 +304,7 @@
                         <div class="qr-asset-label" id="qr-asset-label"></div>
                     </div>
                     <p style="margin-top:1rem; color: var(--slate-500); word-break: break-all; font-size: 0.8rem;" id="qr-full-url"></p>
-                    <button class="download-btn" onclick="downloadSingleQR()">Download PNG</button>
+                    <button class="download-btn" onclick="downloadSingleQR()">📥 Download PNG</button>
                 </div>
             </div>
 
@@ -287,7 +321,19 @@
                 </div>
                 <button class="generate-btn" id="batch-gen-btn" onclick="generateBatchQR()" disabled>Generate All QR Codes</button>
                 <div id="batch-output" class="output-section">
-                    <button class="download-btn" onclick="downloadAllZip()">Download All (ZIP)</button>
+                    <div class="download-options">
+                        <button class="download-btn" onclick="downloadAllZip()">📦 Download ZIP</button>
+                        <button class="download-btn pdf" onclick="downloadPDF()">📄 Download PDF Grid</button>
+                    </div>
+                    <div class="pdf-options" id="batch-pdf-options">
+                        <label>Grid Size:</label>
+                        <select id="batch-grid-size">
+                            <option value="2x4">2 × 4 (8 per page)</option>
+                            <option value="3x5" selected>3 × 5 (15 per page)</option>
+                            <option value="4x6">4 × 6 (24 per page)</option>
+                        </select>
+                        <button class="template-btn" onclick="generatePDF('batch')">Generate PDF</button>
+                    </div>
                     <div id="batch-results" class="batch-results"></div>
                 </div>
             </div>
@@ -368,6 +414,7 @@
                     <div class="selection-bar">
                         <span class="selected-count" id="tandem-asset-count">0 selected</span>
                         <button class="template-btn" onclick="selectVisibleAssets()">Select Visible</button>
+                        <button class="template-btn" onclick="selectAllTandemAssets()">Select All</button>
                         <button class="template-btn" onclick="deselectAllTandemAssets()">Deselect All</button>
                     </div>
                     
@@ -378,7 +425,19 @@
                     </button>
                     
                     <div id="tandem-output" class="output-section">
-                        <button class="download-btn" onclick="downloadAllZip()">Download All as ZIP</button>
+                        <div class="download-options">
+                            <button class="download-btn" onclick="downloadAllZip()">📦 Download ZIP</button>
+                            <button class="download-btn pdf" onclick="togglePdfOptions('tandem')">📄 Download PDF Grid</button>
+                        </div>
+                        <div class="pdf-options" id="tandem-pdf-options">
+                            <label>Grid Size:</label>
+                            <select id="tandem-grid-size">
+                                <option value="2x4">2 × 4 (8 per page)</option>
+                                <option value="3x5" selected>3 × 5 (15 per page)</option>
+                                <option value="4x6">4 × 6 (24 per page)</option>
+                            </select>
+                            <button class="template-btn" onclick="generatePDF('tandem')">Generate PDF</button>
+                        </div>
                         <div id="tandem-results" class="batch-results"></div>
                     </div>
                 </div>
@@ -395,6 +454,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         var PORTAL_URL = 'https://trombonepunk81.github.io/ABC-Healthcare-Portal/';
@@ -421,7 +481,7 @@
         var tandemAssets = [];
         var selectedAssets = new Set();
         
-        // Filter state - stores which values are checked for each filter
+        // Filter state
         var filters = {
             category: new Set(),
             level: new Set(),
@@ -481,6 +541,91 @@
         // Build portal URL
         function buildUrl(assetId, tandemUrl) {
             return PORTAL_URL + '?asset=' + encodeURIComponent(assetId) + '&tandem=' + encodeURIComponent(tandemUrl);
+        }
+
+        // ==================== PDF GENERATION ====================
+        function togglePdfOptions(source) {
+            var options = document.getElementById(source + '-pdf-options');
+            options.classList.toggle('active');
+        }
+
+        function generatePDF(source) {
+            var gridSelect = document.getElementById(source + '-grid-size');
+            var gridSize = gridSelect.value.split('x');
+            var cols = parseInt(gridSize[0]);
+            var rows = parseInt(gridSize[1]);
+            
+            if (batchQRs.length === 0) {
+                alert('No QR codes generated yet');
+                return;
+            }
+            
+            var { jsPDF } = window.jspdf;
+            var pdf = new jsPDF('portrait', 'mm', 'letter');
+            
+            // Letter size: 215.9mm x 279.4mm
+            var pageWidth = 215.9;
+            var pageHeight = 279.4;
+            var margin = 10;
+            
+            var cellWidth = (pageWidth - margin * 2) / cols;
+            var cellHeight = (pageHeight - margin * 2) / rows;
+            var qrSize = Math.min(cellWidth, cellHeight) - 15; // Leave room for label
+            
+            var itemsPerPage = cols * rows;
+            var currentItem = 0;
+            
+            batchQRs.forEach(function(item, index) {
+                if (!item || !item.element) return;
+                
+                // Add new page if needed
+                if (currentItem > 0 && currentItem % itemsPerPage === 0) {
+                    pdf.addPage();
+                }
+                
+                var positionOnPage = currentItem % itemsPerPage;
+                var col = positionOnPage % cols;
+                var row = Math.floor(positionOnPage / cols);
+                
+                var x = margin + col * cellWidth + (cellWidth - qrSize) / 2;
+                var y = margin + row * cellHeight + 2;
+                
+                // Get image data from canvas or img
+                var imgData;
+                if (item.element.tagName === 'CANVAS') {
+                    imgData = item.element.toDataURL('image/png');
+                } else {
+                    // For img elements, we need to draw to a temp canvas
+                    var tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = item.element.width;
+                    tempCanvas.height = item.element.height;
+                    var ctx = tempCanvas.getContext('2d');
+                    ctx.drawImage(item.element, 0, 0);
+                    imgData = tempCanvas.toDataURL('image/png');
+                }
+                
+                // Add QR code
+                pdf.addImage(imgData, 'PNG', x, y, qrSize, qrSize);
+                
+                // Add label below QR code
+                pdf.setFontSize(8);
+                pdf.setFont('helvetica', 'bold');
+                var labelX = margin + col * cellWidth + cellWidth / 2;
+                var labelY = y + qrSize + 4;
+                pdf.text(item.assetId, labelX, labelY, { align: 'center' });
+                
+                // Add room/level if available
+                if (item.room || item.level) {
+                    pdf.setFontSize(6);
+                    pdf.setFont('helvetica', 'normal');
+                    var metaText = [item.room, item.level].filter(Boolean).join(' · ');
+                    pdf.text(metaText, labelX, labelY + 3, { align: 'center' });
+                }
+                
+                currentItem++;
+            });
+            
+            pdf.save('QR_Codes_' + new Date().toISOString().slice(0, 10) + '.pdf');
         }
 
         // ==================== SINGLE QR CODE ====================
@@ -763,8 +908,8 @@
                 // Select all filter options by default
                 initializeFilters();
                 
-                // Select all assets by default
-                selectedAssets = new Set(tandemAssets.map(function(a) { return a.assetId; }));
+                // DEFAULT: Select only visible assets (all are visible initially)
+                selectVisibleAssets();
                 
                 // Show success
                 var lastUpdated = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : 'Unknown';
@@ -802,7 +947,6 @@
                 rooms.set(room, (rooms.get(room) || 0) + 1);
             });
             
-            // Sort and store
             filterOptions.category = Array.from(categories.entries()).sort(function(a, b) {
                 return getCategoryName(a[0]).localeCompare(getCategoryName(b[0]));
             });
@@ -815,7 +959,6 @@
         }
 
         function initializeFilters() {
-            // Select all options by default
             filters.category = new Set(filterOptions.category.map(function(o) { return o[0]; }));
             filters.level = new Set(filterOptions.level.map(function(o) { return o[0]; }));
             filters.room = new Set(filterOptions.room.map(function(o) { return o[0]; }));
@@ -965,7 +1108,6 @@
             container.innerHTML = '';
             
             var visibleCount = 0;
-            var selectedVisibleCount = 0;
             
             tandemAssets.forEach(function(asset) {
                 var passesFilter = assetPassesFilters(asset);
@@ -978,10 +1120,8 @@
                 
                 if (passesFilter) {
                     visibleCount++;
-                    if (isSelected) selectedVisibleCount++;
                 }
                 
-                // Build metadata tags
                 var metaTags = '';
                 if (asset.category) {
                     metaTags += '<span class="category-tag">' + getCategoryName(asset.category) + '</span>';
@@ -1025,11 +1165,19 @@
         }
 
         function selectVisibleAssets() {
+            // Clear current selection first, then select only visible
+            selectedAssets.clear();
             tandemAssets.forEach(function(asset) {
                 if (assetPassesFilters(asset)) {
                     selectedAssets.add(asset.assetId);
                 }
             });
+            displayTandemAssets();
+        }
+
+        function selectAllTandemAssets() {
+            // Select ALL assets regardless of filter
+            selectedAssets = new Set(tandemAssets.map(function(a) { return a.assetId; }));
             displayTandemAssets();
         }
 
@@ -1072,7 +1220,6 @@
                 label.textContent = asset.assetId;
                 div.appendChild(label);
                 
-                // Add metadata under label
                 if (asset.room || asset.level) {
                     var meta = document.createElement('div');
                     meta.style.cssText = 'font-size: 0.7rem; color: var(--slate-500); margin-top: 0.25rem;';
@@ -1106,6 +1253,8 @@
                         var canvas = qrDiv.querySelector('canvas');
                         batchQRs[index] = {
                             assetId: asset.assetId,
+                            room: asset.room || '',
+                            level: asset.level || '',
                             element: img || canvas
                         };
                     }, 50);
