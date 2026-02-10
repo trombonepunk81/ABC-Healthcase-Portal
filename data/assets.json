@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-10T17:41:59.679Z",
+  "lastUpdated": "2026-02-10T17:42:04.810Z",
   "totalAssets": 63,
   "assets": [
     {
@@ -88,11 +88,17 @@
     },
     {
       "assetId": "1EQDPHA",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAQMC2D5bFOcKfiJr0GdC6KAGXUhw"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAQMC2D5bFOcKfiJr0GdC6KAGXUhw",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "1EQLA",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD8Hg3v96BNzpRK3CLctZU9AGXlIg"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD8Hg3v96BNzpRK3CLctZU9AGXlIg",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "37",
@@ -221,15 +227,24 @@
     },
     {
       "assetId": "ELP-1EDP1",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD2Xc4nCR9MMYgWlLOFWSQLAGXZww"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD2Xc4nCR9MMYgWlLOFWSQLAGXZww",
+      "category": "E.Eq",
+      "level": "",
+      "room": ""
     },
     {
       "assetId": "ELP-1EDP2",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD2Xc4nCR9MMYgWlLOFWSQLAGXYgg"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAD2Xc4nCR9MMYgWlLOFWSQLAGXYgg",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "H4",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAACE2TpGSW9BlJJKP99mE2QlAGXbBQ"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAACE2TpGSW9BlJJKP99mE2QlAGXbBQ",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "HH-EF BR-201",
@@ -254,11 +269,17 @@
     },
     {
       "assetId": "LN1-1A3A",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAXD0cNCXBGC4T3wYN7d1Y9AGVakg"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAXD0cNCXBGC4T3wYN7d1Y9AGVakg",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": "MECH E1885B"
     },
     {
       "assetId": "LN1-1A3B",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAXD0cNCXBGC4T3wYN7d1Y9AGVaSQ"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAAAXD0cNCXBGC4T3wYN7d1Y9AGVaSQ",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": "MECH E1885B"
     },
     {
       "assetId": "ME-AHU MRI-S35",
@@ -388,7 +409,10 @@
     },
     {
       "assetId": "T1EQLA",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAADldAl6Mn9EWaYA4Xjcwwm1AGXq2w"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=2M5Dn0XwTFGKCQdejFg29QEAAADldAl6Mn9EWaYA4Xjcwwm1AGXq2w",
+      "category": "E.Eq",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "VAV 0Q",
