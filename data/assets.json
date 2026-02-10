@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-10T17:09:04.317Z",
+  "lastUpdated": "2026-02-10T17:41:50.669Z",
   "totalAssets": 63,
   "assets": [
     {
@@ -80,39 +80,66 @@
     },
     {
       "assetId": "ACP-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAADS69DFuIFFQrweFO5da6YLACfy1Q"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAADS69DFuIFFQrweFO5da6YLACfy1Q",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "CAM.E1879-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAAB2W0vH_aRM3JXoaq-oagaZACfp2w"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAAB2W0vH_aRM3JXoaq-oagaZACfp2w",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "IV START E1879-A"
     },
     {
       "assetId": "CAM.E1879.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetaQ"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetaQ",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "MRI WAITING E1879"
     },
     {
       "assetId": "CAM.E1902-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbQ"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbQ",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "HOLDING TRANSFER E1902-A"
     },
     {
       "assetId": "CAM.E1902-A.02",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbA"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbA",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "HOLDING TRANSFER E1902-A"
     },
     {
       "assetId": "CAM.E1905-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbg"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbg",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "GOWNED WAITING E1908-A"
     },
     {
       "assetId": "CAM.W1658C.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetaw"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetaw",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "IV START W1658C"
     },
     {
       "assetId": "CR.E1903-F.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetag"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetag",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "CORRIDOR E1877"
     },
     {
       "assetId": "CR.E1908-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetdA"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetdA",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "GOWNED WAITING E1908-A"
     },
     {
       "assetId": "DI 02",
@@ -160,7 +187,10 @@
     },
     {
       "assetId": "IC.E1903-A",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcg"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcg",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "CONTROL ROOM E1903-A"
     },
     {
       "assetId": "LN1-1A3A",
@@ -224,23 +254,38 @@
     },
     {
       "assetId": "NVR.L01A",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAADS69DFuIFFQrweFO5da6YLACi8kw"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAADS69DFuIFFQrweFO5da6YLACi8kw",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": ""
     },
     {
       "assetId": "PB.E1903-A",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcQ"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcQ",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "CONTROL ROOM E1903-A"
     },
     {
       "assetId": "PB.E1903-F.02",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbw"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetbw",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "CONTROL ROOM E1903-A"
     },
     {
       "assetId": "PB.E1908-A.01",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcw"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcw",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "GOWNED WAITING E1908-A"
     },
     {
       "assetId": "PB.W1658C",
-      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcA"
+      "assetUrl": "https://tandem.autodesk.com/pages/facilities/urn:adsk.dtt:66d8Z0HpQGy12u7I8XWfFw?selection=hqW9Py4MQHSBIGZ5WuoWIgEAAACH6IavaO1GNqv6amdnX9j-ACetcA",
+      "category": "Q.SD",
+      "level": "FIRST FLOOR",
+      "room": "IV START W1658C"
     },
     {
       "assetId": "T1EQLA",
