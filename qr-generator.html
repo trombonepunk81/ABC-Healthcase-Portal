@@ -76,15 +76,13 @@
         .connect-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--teal-600), var(--teal-500)); color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .connect-btn:hover { transform: translateY(-1px); }
         .connect-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .logout-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border: 1px solid var(--slate-200); border-radius: 8px; background: white; color: var(--slate-600); cursor: pointer; font-size: 0.85rem; margin-bottom: 1rem; }
-        .asset-search { width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 0.95rem; margin-bottom: 1rem; }
         .asset-list { max-height: 400px; overflow-y: auto; border: 1px solid var(--slate-200); border-radius: 10px; margin-bottom: 1rem; }
         .asset-item { padding: 1rem; border-bottom: 1px solid var(--slate-200); cursor: pointer; transition: background 0.2s; }
         .asset-item:hover { background: var(--slate-100); }
         .asset-item:last-child { border-bottom: none; }
         .asset-item.selected { background: rgba(20, 184, 166, 0.1); border-left: 3px solid var(--teal-500); }
+        .asset-item.hidden { display: none; }
         .asset-item-name { font-weight: 600; color: var(--slate-800); margin-bottom: 0.25rem; }
-        .asset-item-id { font-size: 0.85rem; color: var(--slate-600); font-family: monospace; }
         .asset-item-meta { font-size: 0.8rem; color: var(--slate-500); margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .asset-item-meta span { background: var(--slate-100); padding: 0.15rem 0.5rem; border-radius: 4px; }
         .asset-item-meta .category-tag { background: rgba(20, 184, 166, 0.15); color: var(--teal-600); }
@@ -92,10 +90,150 @@
         .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--slate-200); border-top-color: var(--teal-500); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .info-banner { background: rgba(20, 184, 166, 0.05); border-left: 3px solid var(--teal-500); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
-        .warning-banner { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
+
+        /* Excel-style Filter Dropdowns */
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            background: white;
+            color: var(--slate-700);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            min-width: 140px;
+            justify-content: space-between;
+        }
+        .filter-btn:hover { border-color: var(--teal-400); }
+        .filter-btn.active { border-color: var(--teal-500); background: rgba(20, 184, 166, 0.05); }
+        .filter-btn .arrow { font-size: 0.7rem; transition: transform 0.2s; }
+        .filter-btn.open .arrow { transform: rotate(180deg); }
+        .filter-badge {
+            background: var(--teal-500);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            margin-left: 0.25rem;
+        }
+        .filter-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            box-shadow: 0 10px 40px -10px rgba(15,23,42,0.3);
+            z-index: 100;
+            min-width: 240px;
+            max-width: 300px;
+            display: none;
+        }
+        .filter-panel.open { display: block; }
+        .filter-search {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: none;
+            border-bottom: 1px solid var(--slate-200);
+            font-size: 0.85rem;
+            font-family: inherit;
+            border-radius: 10px 10px 0 0;
+        }
+        .filter-search:focus { outline: none; background: var(--slate-100); }
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--slate-200);
+            background: var(--slate-100);
+        }
+        .filter-action-btn {
+            padding: 0.35rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            background: white;
+            color: var(--slate-600);
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .filter-action-btn:hover { background: var(--teal-500); color: white; }
+        .filter-options {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.875rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.15s;
+        }
+        .filter-option:hover { background: var(--slate-100); }
+        .filter-option.hidden { display: none; }
+        .filter-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--teal-500);
+            cursor: pointer;
+        }
+        .filter-option-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .filter-option-count {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            background: var(--slate-100);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+        .clear-filters-btn {
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            background: white;
+            color: var(--slate-600);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+        .clear-filters-btn:hover { background: var(--slate-100); }
         
-        /* Category code mapping display */
-        .category-legend { font-size: 0.75rem; color: var(--slate-500); margin-top: 0.5rem; }
+        .filter-summary {
+            font-size: 0.8rem;
+            color: var(--slate-500);
+            margin-bottom: 0.75rem;
+        }
+        
+        .selection-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -168,18 +306,69 @@
                 <div id="tandem-status" style="margin-top: 1rem; display: none;"></div>
                 
                 <div id="tandem-loaded" style="display:none;">
-                    <div class="selected-count" id="tandem-asset-count"></div>
                     
-                    <input type="text" 
-                           id="tandem-search" 
-                           class="asset-search" 
-                           placeholder="Search by Asset ID, Room, Level, or Category..."
-                           onkeyup="filterTandemAssets()">
+                    <!-- Filter Bar -->
+                    <div class="filter-bar" id="filter-bar">
+                        <!-- Category Filter -->
+                        <div class="filter-dropdown" id="filter-category">
+                            <button class="filter-btn" onclick="toggleFilterPanel('category')">
+                                <span>Category</span>
+                                <span class="filter-badge" id="category-badge" style="display:none;">0</span>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="filter-panel" id="category-panel">
+                                <input type="text" class="filter-search" placeholder="Search categories..." oninput="searchFilterOptions('category', this.value)">
+                                <div class="filter-actions">
+                                    <button class="filter-action-btn" onclick="selectAllFilterOptions('category')">Select All</button>
+                                    <button class="filter-action-btn" onclick="deselectAllFilterOptions('category')">Clear</button>
+                                </div>
+                                <div class="filter-options" id="category-options"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Level Filter -->
+                        <div class="filter-dropdown" id="filter-level">
+                            <button class="filter-btn" onclick="toggleFilterPanel('level')">
+                                <span>Level</span>
+                                <span class="filter-badge" id="level-badge" style="display:none;">0</span>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="filter-panel" id="level-panel">
+                                <input type="text" class="filter-search" placeholder="Search levels..." oninput="searchFilterOptions('level', this.value)">
+                                <div class="filter-actions">
+                                    <button class="filter-action-btn" onclick="selectAllFilterOptions('level')">Select All</button>
+                                    <button class="filter-action-btn" onclick="deselectAllFilterOptions('level')">Clear</button>
+                                </div>
+                                <div class="filter-options" id="level-options"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Room Filter -->
+                        <div class="filter-dropdown" id="filter-room">
+                            <button class="filter-btn" onclick="toggleFilterPanel('room')">
+                                <span>Room</span>
+                                <span class="filter-badge" id="room-badge" style="display:none;">0</span>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="filter-panel" id="room-panel">
+                                <input type="text" class="filter-search" placeholder="Search rooms..." oninput="searchFilterOptions('room', this.value)">
+                                <div class="filter-actions">
+                                    <button class="filter-action-btn" onclick="selectAllFilterOptions('room')">Select All</button>
+                                    <button class="filter-action-btn" onclick="deselectAllFilterOptions('room')">Clear</button>
+                                </div>
+                                <div class="filter-options" id="room-options"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="clear-filters-btn" onclick="clearAllFilters()">Clear All Filters</button>
+                    </div>
                     
-                    <div style="margin-bottom: 1rem;">
-                        <button class="template-btn" onclick="selectAllTandemAssets()">Select All</button>
+                    <div class="filter-summary" id="filter-summary">Showing all assets</div>
+                    
+                    <div class="selection-bar">
+                        <span class="selected-count" id="tandem-asset-count">0 selected</span>
+                        <button class="template-btn" onclick="selectVisibleAssets()">Select Visible</button>
                         <button class="template-btn" onclick="deselectAllTandemAssets()">Deselect All</button>
-                        <button class="template-btn" onclick="selectFilteredAssets()">Select Filtered</button>
                     </div>
                     
                     <div class="asset-list" id="tandem-asset-list"></div>
@@ -225,8 +414,26 @@
         };
 
         function getCategoryName(code) {
-            return categoryNames[code] || code || '';
+            return categoryNames[code] || code || '(No Category)';
         }
+
+        // ==================== TANDEM DATA & FILTERS ====================
+        var tandemAssets = [];
+        var selectedAssets = new Set();
+        
+        // Filter state - stores which values are checked for each filter
+        var filters = {
+            category: new Set(),
+            level: new Set(),
+            room: new Set()
+        };
+        
+        // All unique values for each filter
+        var filterOptions = {
+            category: [],
+            level: [],
+            room: []
+        };
 
         // Check if QRCode library loaded
         window.addEventListener('DOMContentLoaded', function() {
@@ -242,6 +449,13 @@
                 status.textContent = '✗ QR Code library failed to load. Check network/firewall.';
                 status.className = 'status-bar error';
             }
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.filter-dropdown')) {
+                    closeAllFilterPanels();
+                }
+            });
         });
 
         // Tab switching
@@ -480,7 +694,6 @@
 
         function downloadAllZip() {
             var zip = new JSZip();
-            var promises = [];
 
             batchQRs.forEach(function(item, index) {
                 if (!item || !item.element) return;
@@ -517,9 +730,6 @@
         }
 
         // ==================== TANDEM CONNECT ====================
-        var tandemAssets = [];
-        var selectedAssets = new Set();
-
         async function loadTandemAssets() {
             var btn = document.getElementById('load-tandem-btn');
             var btnText = document.getElementById('tandem-btn-text');
@@ -534,7 +744,6 @@
             status.textContent = 'Fetching assets from Tandem Connect...';
             
             try {
-                // Fetch the merged asset data from GitHub Pages
                 var response = await fetch(ASSETS_JSON_URL);
                 
                 if (!response.ok) {
@@ -548,7 +757,13 @@
                     throw new Error('No assets found in data file');
                 }
                 
-                // Select all by default
+                // Build filter options from data
+                buildFilterOptions();
+                
+                // Select all filter options by default
+                initializeFilters();
+                
+                // Select all assets by default
                 selectedAssets = new Set(tandemAssets.map(function(a) { return a.assetId; }));
                 
                 // Show success
@@ -556,7 +771,8 @@
                 status.className = 'status-bar success';
                 status.textContent = '✅ Loaded ' + tandemAssets.length + ' assets (Last updated: ' + lastUpdated + ')';
                 
-                // Display assets
+                // Display
+                renderFilterOptions();
                 displayTandemAssets();
                 
                 document.getElementById('tandem-loaded').style.display = 'block';
@@ -571,24 +787,199 @@
             }
         }
 
-        function displayTandemAssets() {
-            var container = document.getElementById('tandem-asset-list');
-            var countEl = document.getElementById('tandem-asset-count');
-            
-            container.innerHTML = '';
+        function buildFilterOptions() {
+            var categories = new Map();
+            var levels = new Map();
+            var rooms = new Map();
             
             tandemAssets.forEach(function(asset) {
+                var cat = asset.category || '';
+                var lev = asset.level || '';
+                var room = asset.room || '';
+                
+                categories.set(cat, (categories.get(cat) || 0) + 1);
+                levels.set(lev, (levels.get(lev) || 0) + 1);
+                rooms.set(room, (rooms.get(room) || 0) + 1);
+            });
+            
+            // Sort and store
+            filterOptions.category = Array.from(categories.entries()).sort(function(a, b) {
+                return getCategoryName(a[0]).localeCompare(getCategoryName(b[0]));
+            });
+            filterOptions.level = Array.from(levels.entries()).sort(function(a, b) {
+                return a[0].localeCompare(b[0]);
+            });
+            filterOptions.room = Array.from(rooms.entries()).sort(function(a, b) {
+                return a[0].localeCompare(b[0]);
+            });
+        }
+
+        function initializeFilters() {
+            // Select all options by default
+            filters.category = new Set(filterOptions.category.map(function(o) { return o[0]; }));
+            filters.level = new Set(filterOptions.level.map(function(o) { return o[0]; }));
+            filters.room = new Set(filterOptions.room.map(function(o) { return o[0]; }));
+        }
+
+        function renderFilterOptions() {
+            renderFilterOptionsForType('category');
+            renderFilterOptionsForType('level');
+            renderFilterOptionsForType('room');
+            updateFilterBadges();
+        }
+
+        function renderFilterOptionsForType(type) {
+            var container = document.getElementById(type + '-options');
+            container.innerHTML = '';
+            
+            filterOptions[type].forEach(function(option) {
+                var value = option[0];
+                var count = option[1];
+                var displayName = type === 'category' ? getCategoryName(value) : (value || '(Blank)');
+                
                 var div = document.createElement('div');
-                div.className = 'asset-item' + (selectedAssets.has(asset.assetId) ? ' selected' : '');
+                div.className = 'filter-option';
+                div.setAttribute('data-value', value);
+                div.setAttribute('data-search', displayName.toLowerCase());
+                
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = filters[type].has(value);
+                checkbox.onchange = function() {
+                    toggleFilterOption(type, value, this.checked);
+                };
+                
+                var label = document.createElement('span');
+                label.className = 'filter-option-label';
+                label.textContent = displayName;
+                
+                var countSpan = document.createElement('span');
+                countSpan.className = 'filter-option-count';
+                countSpan.textContent = count;
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                div.appendChild(countSpan);
+                
+                div.onclick = function(e) {
+                    if (e.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                        toggleFilterOption(type, value, checkbox.checked);
+                    }
+                };
+                
+                container.appendChild(div);
+            });
+        }
+
+        function toggleFilterOption(type, value, checked) {
+            if (checked) {
+                filters[type].add(value);
+            } else {
+                filters[type].delete(value);
+            }
+            applyFilters();
+        }
+
+        function selectAllFilterOptions(type) {
+            filters[type] = new Set(filterOptions[type].map(function(o) { return o[0]; }));
+            renderFilterOptionsForType(type);
+            applyFilters();
+        }
+
+        function deselectAllFilterOptions(type) {
+            filters[type].clear();
+            renderFilterOptionsForType(type);
+            applyFilters();
+        }
+
+        function searchFilterOptions(type, query) {
+            var options = document.querySelectorAll('#' + type + '-options .filter-option');
+            var lowerQuery = query.toLowerCase();
+            
+            options.forEach(function(opt) {
+                var searchText = opt.getAttribute('data-search');
+                opt.classList.toggle('hidden', !searchText.includes(lowerQuery));
+            });
+        }
+
+        function toggleFilterPanel(type) {
+            var panel = document.getElementById(type + '-panel');
+            var btn = panel.previousElementSibling;
+            var isOpen = panel.classList.contains('open');
+            
+            closeAllFilterPanels();
+            
+            if (!isOpen) {
+                panel.classList.add('open');
+                btn.classList.add('open');
+            }
+        }
+
+        function closeAllFilterPanels() {
+            document.querySelectorAll('.filter-panel').forEach(function(p) { p.classList.remove('open'); });
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('open'); });
+        }
+
+        function clearAllFilters() {
+            initializeFilters();
+            renderFilterOptions();
+            applyFilters();
+        }
+
+        function updateFilterBadges() {
+            ['category', 'level', 'room'].forEach(function(type) {
+                var total = filterOptions[type].length;
+                var selected = filters[type].size;
+                var badge = document.getElementById(type + '-badge');
+                var btn = badge.closest('.filter-btn');
+                
+                if (selected < total) {
+                    badge.textContent = selected;
+                    badge.style.display = 'inline';
+                    btn.classList.add('active');
+                } else {
+                    badge.style.display = 'none';
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function applyFilters() {
+            updateFilterBadges();
+            displayTandemAssets();
+        }
+
+        function assetPassesFilters(asset) {
+            var catValue = asset.category || '';
+            var levValue = asset.level || '';
+            var roomValue = asset.room || '';
+            
+            return filters.category.has(catValue) &&
+                   filters.level.has(levValue) &&
+                   filters.room.has(roomValue);
+        }
+
+        function displayTandemAssets() {
+            var container = document.getElementById('tandem-asset-list');
+            container.innerHTML = '';
+            
+            var visibleCount = 0;
+            var selectedVisibleCount = 0;
+            
+            tandemAssets.forEach(function(asset) {
+                var passesFilter = assetPassesFilters(asset);
+                var isSelected = selectedAssets.has(asset.assetId);
+                
+                var div = document.createElement('div');
+                div.className = 'asset-item' + (isSelected ? ' selected' : '') + (!passesFilter ? ' hidden' : '');
                 div.setAttribute('data-asset-id', asset.assetId);
-                div.setAttribute('data-searchable', [
-                    asset.assetId,
-                    asset.level || '',
-                    asset.room || '',
-                    asset.category || '',
-                    getCategoryName(asset.category)
-                ].join(' ').toLowerCase());
                 div.onclick = function() { toggleAssetSelection(asset.assetId); };
+                
+                if (passesFilter) {
+                    visibleCount++;
+                    if (isSelected) selectedVisibleCount++;
+                }
                 
                 // Build metadata tags
                 var metaTags = '';
@@ -605,13 +996,23 @@
                 div.innerHTML = 
                     '<div class="asset-item-name">' + asset.assetId + '</div>' +
                     (metaTags ? '<div class="asset-item-meta">' + metaTags + '</div>' : '') +
-                    '<div class="asset-item-id" style="font-size:0.7rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:0.35rem; color: var(--slate-400);">' +
-                    (asset.assetUrl ? '🔗 ' + asset.assetUrl.substring(0, 60) + '...' : 'No URL') + '</div>';
+                    '<div style="font-size:0.7rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:0.35rem; color: var(--slate-400);">' +
+                    (asset.assetUrl ? '🔗 Tandem Link' : 'No URL') + '</div>';
                 
                 container.appendChild(div);
             });
             
             updateSelectedCount();
+            updateFilterSummary(visibleCount);
+        }
+
+        function updateFilterSummary(visibleCount) {
+            var summary = document.getElementById('filter-summary');
+            if (visibleCount === tandemAssets.length) {
+                summary.textContent = 'Showing all ' + tandemAssets.length + ' assets';
+            } else {
+                summary.textContent = 'Showing ' + visibleCount + ' of ' + tandemAssets.length + ' assets (filtered)';
+            }
         }
 
         function toggleAssetSelection(assetId) {
@@ -620,12 +1021,15 @@
             } else {
                 selectedAssets.add(assetId);
             }
-            
             displayTandemAssets();
         }
 
-        function selectAllTandemAssets() {
-            selectedAssets = new Set(tandemAssets.map(function(a) { return a.assetId; }));
+        function selectVisibleAssets() {
+            tandemAssets.forEach(function(asset) {
+                if (assetPassesFilters(asset)) {
+                    selectedAssets.add(asset.assetId);
+                }
+            });
             displayTandemAssets();
         }
 
@@ -634,43 +1038,9 @@
             displayTandemAssets();
         }
 
-        function selectFilteredAssets() {
-            var search = document.getElementById('tandem-search').value.toLowerCase();
-            if (!search) {
-                selectAllTandemAssets();
-                return;
-            }
-            
-            selectedAssets.clear();
-            tandemAssets.forEach(function(asset) {
-                var searchable = [
-                    asset.assetId,
-                    asset.level || '',
-                    asset.room || '',
-                    asset.category || '',
-                    getCategoryName(asset.category)
-                ].join(' ').toLowerCase();
-                
-                if (searchable.includes(search)) {
-                    selectedAssets.add(asset.assetId);
-                }
-            });
-            displayTandemAssets();
-        }
-
         function updateSelectedCount() {
             var countEl = document.getElementById('tandem-asset-count');
-            countEl.textContent = selectedAssets.size + ' of ' + tandemAssets.length + ' assets selected';
-        }
-
-        function filterTandemAssets() {
-            var search = document.getElementById('tandem-search').value.toLowerCase();
-            var items = document.querySelectorAll('#tandem-asset-list .asset-item');
-            
-            items.forEach(function(item) {
-                var searchable = item.getAttribute('data-searchable') || '';
-                item.style.display = searchable.includes(search) ? 'block' : 'none';
-            });
+            countEl.textContent = selectedAssets.size + ' selected';
         }
 
         function generateTandemQRs() {
