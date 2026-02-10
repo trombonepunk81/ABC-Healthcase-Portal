@@ -85,11 +85,17 @@
         .asset-item.selected { background: rgba(20, 184, 166, 0.1); border-left: 3px solid var(--teal-500); }
         .asset-item-name { font-weight: 600; color: var(--slate-800); margin-bottom: 0.25rem; }
         .asset-item-id { font-size: 0.85rem; color: var(--slate-600); font-family: monospace; }
+        .asset-item-meta { font-size: 0.8rem; color: var(--slate-500); margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .asset-item-meta span { background: var(--slate-100); padding: 0.15rem 0.5rem; border-radius: 4px; }
+        .asset-item-meta .category-tag { background: rgba(20, 184, 166, 0.15); color: var(--teal-600); }
         .selected-count { display: inline-block; background: var(--teal-500); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
         .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--slate-200); border-top-color: var(--teal-500); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .info-banner { background: rgba(20, 184, 166, 0.05); border-left: 3px solid var(--teal-500); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
         .warning-banner { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: var(--slate-700); font-size: 0.9rem; }
+        
+        /* Category code mapping display */
+        .category-legend { font-size: 0.75rem; color: var(--slate-500); margin-top: 0.5rem; }
     </style>
 </head>
 <body>
@@ -151,7 +157,7 @@
             <!-- TANDEM CONNECT TAB -->
             <div id="tandem-tab-content" class="tab-content">
                 <div class="info-banner">
-                    🔗 Load assets directly from Tandem Connect pipeline data
+                    🔗 Load assets directly from Tandem Connect pipeline data (auto-synced daily)
                 </div>
                 
                 <button class="connect-btn" id="load-tandem-btn" onclick="loadTandemAssets()">
@@ -167,12 +173,13 @@
                     <input type="text" 
                            id="tandem-search" 
                            class="asset-search" 
-                           placeholder="Search assets by ID..."
+                           placeholder="Search by Asset ID, Room, Level, or Category..."
                            onkeyup="filterTandemAssets()">
                     
                     <div style="margin-bottom: 1rem;">
                         <button class="template-btn" onclick="selectAllTandemAssets()">Select All</button>
                         <button class="template-btn" onclick="deselectAllTandemAssets()">Deselect All</button>
+                        <button class="template-btn" onclick="selectFilteredAssets()">Select Filtered</button>
                     </div>
                     
                     <div class="asset-list" id="tandem-asset-list"></div>
@@ -202,9 +209,24 @@
 
     <script>
         var PORTAL_URL = 'https://trombonepunk81.github.io/ABC-Healthcare-Portal/';
+        var ASSETS_JSON_URL = 'https://trombonepunk81.github.io/ABC-Healthcare-Portal/data/assets.json';
         var currentQR = null;
         var batchQRs = [];
         var qrLibraryLoaded = false;
+
+        // Category code to friendly name mapping
+        var categoryNames = {
+            'Q.SD': 'Security Device',
+            'M.Eq': 'Mechanical Equipment',
+            'E.Eq': 'Electrical Equipment',
+            'B.Do': 'Door',
+            'P.Eq': 'Plumbing Equipment',
+            'F.Eq': 'Fire Protection'
+        };
+
+        function getCategoryName(code) {
+            return categoryNames[code] || code || '';
+        }
 
         // Check if QRCode library loaded
         window.addEventListener('DOMContentLoaded', function() {
@@ -305,17 +327,17 @@
             ctx.drawImage(element, padding, padding);
 
             ctx.fillStyle = '#000000';
-            ctx.font = 'bold 18px sans-serif';
+            ctx.font = 'bold 16px DM Sans, sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(assetId, exportCanvas.width / 2, element.height + padding + 28);
 
             var link = document.createElement('a');
-            link.download = 'QR-' + assetId + '.png';
+            link.download = 'QR_' + assetId.replace(/[^a-zA-Z0-9]/g, '_') + '.png';
             link.href = exportCanvas.toDataURL('image/png');
             link.click();
         }
 
-        // ==================== BATCH GENERATION ====================
+        // ==================== BATCH QR CODES ====================
         function importExcel(event) {
             var file = event.target.files[0];
             if (!file) return;
@@ -323,16 +345,17 @@
             var reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    var data = new Uint8Array(e.target.result);
-                    var workbook = XLSX.read(data, { type: 'array' });
-                    var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    var json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    var workbook = XLSX.read(e.target.result, { type: 'binary' });
+                    var sheetName = workbook.SheetNames[0];
+                    var sheet = workbook.Sheets[sheetName];
+                    var data = XLSX.utils.sheet_to_json(sheet);
 
-                    var lines = [];
-                    json.forEach(function(row) {
-                        if (row.length >= 2 && row[0] && row[1]) {
-                            lines.push(row[0] + ', ' + row[1]);
-                        }
+                    var lines = data.map(function(row) {
+                        var assetId = row['Asset ID'] || row['assetId'] || row['AssetID'] || '';
+                        var tandemUrl = row['Tandem URL'] || row['tandemUrl'] || row['TandemURL'] || row['url'] || '';
+                        return assetId + ', ' + tandemUrl;
+                    }).filter(function(line) {
+                        return line.trim() !== ', ';
                     });
 
                     document.getElementById('batch-data').value = lines.join('\n');
@@ -340,22 +363,25 @@
                     alert('Error reading Excel file: ' + err.message);
                 }
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsBinaryString(file);
         }
 
         function downloadTemplate() {
-            var template = 'AssetID,TandemURL\nCAM.E1879.01,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...\nAHU.B2301.05,https://tandem.autodesk.com/pages/facilities?selection=urn:adsk.dtt:...';
-            var blob = new Blob([template], { type: 'text/csv' });
-            var link = document.createElement('a');
-            link.download = 'ABC-Healthcare-QR-Template.csv';
-            link.href = URL.createObjectURL(blob);
-            link.click();
+            var wb = XLSX.utils.book_new();
+            var data = [
+                ['Asset ID', 'Tandem URL'],
+                ['CAM.E1879.01', 'https://tandem.autodesk.com/pages/facilities/...'],
+                ['AHU.B2301.05', 'https://tandem.autodesk.com/pages/facilities/...']
+            ];
+            var ws = XLSX.utils.aoa_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, 'Assets');
+            XLSX.writeFile(wb, 'QR_Asset_Template.xlsx');
         }
 
         function generateBatchQR() {
             var data = document.getElementById('batch-data').value.trim();
             if (!data) {
-                alert('Please enter asset data');
+                alert('Please enter asset data or import an Excel file');
                 return;
             }
 
@@ -365,12 +391,10 @@
             batchQRs = [];
 
             lines.forEach(function(line, index) {
-                var parts = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
-                parts = parts.map(function(p) { return p.trim(); });
+                var parts = line.split(',');
+                if (parts.length < 2) return;
 
-                if (parts.length < 2 || !parts[0] || !parts[1]) return;
-
-                var assetId = parts[0];
+                var assetId = parts[0].trim();
                 var tandemUrl = parts.slice(1).join(',').trim();
                 var fullUrl = buildUrl(assetId, tandemUrl);
 
@@ -378,7 +402,7 @@
                 div.className = 'batch-item';
 
                 var qrDiv = document.createElement('div');
-                qrDiv.id = 'qr-' + index;
+                qrDiv.id = 'qr-batch-' + index;
                 div.appendChild(qrDiv);
 
                 var label = document.createElement('div');
@@ -415,10 +439,8 @@
                             element: img || canvas
                         };
                     }, 50);
-
                 } catch (err) {
                     console.error('Error generating QR for', assetId, err);
-                    qrDiv.textContent = 'Error';
                 }
             });
 
@@ -433,70 +455,62 @@
             var item = batchQRs[index];
             if (!item || !item.element) return;
 
-            var element = item.element;
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-
+            var exportCanvas = document.createElement('canvas');
+            var ctx = exportCanvas.getContext('2d');
             var padding = 15;
             var labelHeight = 30;
-            canvas.width = element.width + padding * 2;
-            canvas.height = element.height + padding * 2 + labelHeight;
+
+            exportCanvas.width = item.element.width + padding * 2;
+            exportCanvas.height = item.element.height + padding * 2 + labelHeight;
 
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(element, padding, padding);
+            ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+            ctx.drawImage(item.element, padding, padding);
 
             ctx.fillStyle = '#000000';
-            ctx.font = 'bold 14px sans-serif';
+            ctx.font = 'bold 14px DM Sans, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(item.assetId, canvas.width / 2, element.height + padding + 22);
+            ctx.fillText(item.assetId, exportCanvas.width / 2, item.element.height + padding + 22);
 
             var link = document.createElement('a');
-            link.download = 'QR-' + item.assetId + '.png';
-            link.href = canvas.toDataURL('image/png');
+            link.download = 'QR_' + item.assetId.replace(/[^a-zA-Z0-9]/g, '_') + '.png';
+            link.href = exportCanvas.toDataURL('image/png');
             link.click();
         }
 
         function downloadAllZip() {
-            if (typeof JSZip === 'undefined') {
-                alert('ZIP library not loaded');
-                return;
-            }
-
-            var validItems = batchQRs.filter(function(item) { return item && item.element; });
-            if (validItems.length === 0) {
-                alert('No QR codes to download');
-                return;
-            }
-
             var zip = new JSZip();
+            var promises = [];
 
-            validItems.forEach(function(item) {
-                var element = item.element;
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
+            batchQRs.forEach(function(item, index) {
+                if (!item || !item.element) return;
 
+                var exportCanvas = document.createElement('canvas');
+                var ctx = exportCanvas.getContext('2d');
                 var padding = 15;
                 var labelHeight = 30;
-                canvas.width = element.width + padding * 2;
-                canvas.height = element.height + padding * 2 + labelHeight;
+
+                exportCanvas.width = item.element.width + padding * 2;
+                exportCanvas.height = item.element.height + padding * 2 + labelHeight;
 
                 ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(element, padding, padding);
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                ctx.drawImage(item.element, padding, padding);
 
                 ctx.fillStyle = '#000000';
-                ctx.font = 'bold 14px sans-serif';
+                ctx.font = 'bold 14px DM Sans, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(item.assetId, canvas.width / 2, element.height + padding + 22);
+                ctx.fillText(item.assetId, exportCanvas.width / 2, item.element.height + padding + 22);
 
-                var dataUrl = canvas.toDataURL('image/png');
-                zip.file('QR-' + item.assetId + '.png', dataUrl.split(',')[1], { base64: true });
+                var dataUrl = exportCanvas.toDataURL('image/png');
+                var base64 = dataUrl.split(',')[1];
+                var filename = 'QR_' + item.assetId.replace(/[^a-zA-Z0-9]/g, '_') + '.png';
+                zip.file(filename, base64, { base64: true });
             });
 
             zip.generateAsync({ type: 'blob' }).then(function(blob) {
                 var link = document.createElement('a');
-                link.download = 'ABC-Healthcare-QR-Codes.zip';
+                link.download = 'QR_Codes_' + new Date().toISOString().slice(0, 10) + '.zip';
                 link.href = URL.createObjectURL(blob);
                 link.click();
             });
@@ -517,14 +531,14 @@
             btnText.textContent = 'Loading...';
             status.style.display = 'block';
             status.className = 'status-bar loading';
-            status.textContent = 'Fetching assets from Tandem...';
+            status.textContent = 'Fetching assets from Tandem Connect...';
             
             try {
-                // Fetch the merged asset data from GitHub
-                var response = await fetch('/data/tandem-assets.json');
+                // Fetch the merged asset data from GitHub Pages
+                var response = await fetch(ASSETS_JSON_URL);
                 
                 if (!response.ok) {
-                    throw new Error('Failed to load assets. Make sure you\'ve run the pipeline and pushed data to GitHub.');
+                    throw new Error('Failed to load assets. Status: ' + response.status);
                 }
                 
                 var data = await response.json();
@@ -538,8 +552,9 @@
                 selectedAssets = new Set(tandemAssets.map(function(a) { return a.assetId; }));
                 
                 // Show success
+                var lastUpdated = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : 'Unknown';
                 status.className = 'status-bar success';
-                status.textContent = '✅ Loaded ' + tandemAssets.length + ' assets from ' + data.facilityName + ' (Updated: ' + new Date(data.lastUpdated).toLocaleString() + ')';
+                status.textContent = '✅ Loaded ' + tandemAssets.length + ' assets (Last updated: ' + lastUpdated + ')';
                 
                 // Display assets
                 displayTandemAssets();
@@ -566,11 +581,32 @@
                 var div = document.createElement('div');
                 div.className = 'asset-item' + (selectedAssets.has(asset.assetId) ? ' selected' : '');
                 div.setAttribute('data-asset-id', asset.assetId);
+                div.setAttribute('data-searchable', [
+                    asset.assetId,
+                    asset.level || '',
+                    asset.room || '',
+                    asset.category || '',
+                    getCategoryName(asset.category)
+                ].join(' ').toLowerCase());
                 div.onclick = function() { toggleAssetSelection(asset.assetId); };
                 
-                div.innerHTML = '<div class="asset-item-name">' + asset.assetId + '</div>' +
-                    '<div class="asset-item-id" style="font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' +
-                    asset.assetUrl + '</div>';
+                // Build metadata tags
+                var metaTags = '';
+                if (asset.category) {
+                    metaTags += '<span class="category-tag">' + getCategoryName(asset.category) + '</span>';
+                }
+                if (asset.level) {
+                    metaTags += '<span>📍 ' + asset.level + '</span>';
+                }
+                if (asset.room) {
+                    metaTags += '<span>🚪 ' + asset.room + '</span>';
+                }
+                
+                div.innerHTML = 
+                    '<div class="asset-item-name">' + asset.assetId + '</div>' +
+                    (metaTags ? '<div class="asset-item-meta">' + metaTags + '</div>' : '') +
+                    '<div class="asset-item-id" style="font-size:0.7rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:0.35rem; color: var(--slate-400);">' +
+                    (asset.assetUrl ? '🔗 ' + asset.assetUrl.substring(0, 60) + '...' : 'No URL') + '</div>';
                 
                 container.appendChild(div);
             });
@@ -598,9 +634,33 @@
             displayTandemAssets();
         }
 
+        function selectFilteredAssets() {
+            var search = document.getElementById('tandem-search').value.toLowerCase();
+            if (!search) {
+                selectAllTandemAssets();
+                return;
+            }
+            
+            selectedAssets.clear();
+            tandemAssets.forEach(function(asset) {
+                var searchable = [
+                    asset.assetId,
+                    asset.level || '',
+                    asset.room || '',
+                    asset.category || '',
+                    getCategoryName(asset.category)
+                ].join(' ').toLowerCase();
+                
+                if (searchable.includes(search)) {
+                    selectedAssets.add(asset.assetId);
+                }
+            });
+            displayTandemAssets();
+        }
+
         function updateSelectedCount() {
             var countEl = document.getElementById('tandem-asset-count');
-            countEl.textContent = selectedAssets.size + ' assets selected';
+            countEl.textContent = selectedAssets.size + ' of ' + tandemAssets.length + ' assets selected';
         }
 
         function filterTandemAssets() {
@@ -608,8 +668,8 @@
             var items = document.querySelectorAll('#tandem-asset-list .asset-item');
             
             items.forEach(function(item) {
-                var text = item.textContent.toLowerCase();
-                item.style.display = text.includes(search) ? 'block' : 'none';
+                var searchable = item.getAttribute('data-searchable') || '';
+                item.style.display = searchable.includes(search) ? 'block' : 'none';
             });
         }
 
@@ -641,6 +701,14 @@
                 label.className = 'batch-item-label';
                 label.textContent = asset.assetId;
                 div.appendChild(label);
+                
+                // Add metadata under label
+                if (asset.room || asset.level) {
+                    var meta = document.createElement('div');
+                    meta.style.cssText = 'font-size: 0.7rem; color: var(--slate-500); margin-top: 0.25rem;';
+                    meta.textContent = [asset.room, asset.level].filter(Boolean).join(' · ');
+                    div.appendChild(meta);
+                }
                 
                 var btn = document.createElement('button');
                 btn.className = 'batch-item-download';
