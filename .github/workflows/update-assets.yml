@@ -20,11 +20,11 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Pull latest changes
+        run: git pull origin main
+
       - name: Merge asset data
         run: |
-          # Get incoming batch data
-          INCOMING='${{ toJson(github.event.client_payload) }}'
-          
           # Read existing assets (or create empty structure)
           if [ -f data/assets.json ]; then
             EXISTING=$(cat data/assets.json)
@@ -37,7 +37,12 @@ jobs:
           const fs = require('fs');
           
           const incoming = JSON.parse(process.env.INCOMING || '{}');
-          const existing = JSON.parse(process.env.EXISTING || '{"assets":[]}');
+          let existing;
+          try {
+            existing = JSON.parse(process.env.EXISTING || '{"assets":[]}');
+          } catch {
+            existing = {"assets":[]};
+          }
           
           // Get incoming assets
           const newAssets = incoming.assets || [];
@@ -70,11 +75,10 @@ jobs:
           INCOMING: ${{ toJson(github.event.client_payload) }}
           EXISTING: ${{ env.EXISTING }}
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull origin main --rebase
           git add data/assets.json
           git diff --staged --quiet || git commit -m "Update assets from Tandem Connect"
           git push
