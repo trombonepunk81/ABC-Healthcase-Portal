@@ -1,12 +1,260 @@
-<div style="display:flex;flex-direction:column;height:calc(100vh - 3rem)">
-  <div style="padding:12px 16px;border-bottom:1px solid #e2e8f0;display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
-    <button id="load-default"
-      style="padding:0.5rem 1rem;border-radius:8px;border:1px solid #e2e8f0;background:#fff;
-             font-family:inherit;font-size:0.85rem;cursor:pointer;transition:all 0.2s;
-             display:inline-flex;align-items:center;gap:0.5rem">
-      🧭 Open Default Facility
-    </button>
-    <span id="status" style="margin-left:auto;color:#64748b;font-size:0.85rem"></span>
+<!-- Twin Module: Facility Launch Page -->
+<style>
+  .twin-module { font-family: 'DM Sans', sans-serif; color: #0f172a; min-height: calc(100vh - 3rem); display: flex; flex-direction: column; }
+
+  /* ── Hero Banner ── */
+  .twin-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    padding: 2.5rem 2.5rem 3.5rem;
+    border-radius: 16px 16px 0 0;
+    position: relative; overflow: hidden;
+  }
+  .twin-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 15% 50%, rgba(20,184,166,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 30%, rgba(245,158,11,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% 120%, rgba(20,184,166,0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .twin-hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    pointer-events: none;
+  }
+  .twin-hero > * { position: relative; z-index: 1; }
+
+  .twin-hero-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem;
+  }
+  .twin-hero h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem; font-weight: 400; color: #fff;
+    margin: 0 0 0.35rem; line-height: 1.15;
+  }
+  .twin-hero-sub { color: #94a3b8; font-size: 0.9rem; }
+  .twin-status-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.45rem 1rem; border-radius: 20px;
+    background: rgba(20,184,166,0.15); backdrop-filter: blur(8px);
+    border: 1px solid rgba(20,184,166,0.2);
+    font-size: 0.75rem; font-weight: 600; color: #2dd4bf;
+    letter-spacing: 0.03em; white-space: nowrap;
+  }
+  .twin-status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #2dd4bf;
+    box-shadow: 0 0 6px rgba(45,212,191,0.6);
+    animation: twin-pulse 2s ease-in-out infinite;
+  }
+  @keyframes twin-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Facility Card ── */
+  .twin-facility-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 1.5rem;
+  }
+  .twin-facility-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .twin-facility-item {}
+  .twin-facility-label {
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #64748b; margin-bottom: 0.35rem;
+  }
+  .twin-facility-value {
+    font-size: 0.95rem; font-weight: 500; color: #e2e8f0;
+    word-break: break-all;
+  }
+  .twin-facility-value.mono {
+    font-family: 'DM Mono', 'SF Mono', monospace;
+    font-size: 0.8rem; color: #94a3b8;
+  }
+
+  /* ── Body ── */
+  .twin-body { padding: 2rem 2.5rem 2.5rem; flex: 1; }
+
+  /* ── Launch Button ── */
+  .twin-launch-section { margin-bottom: 2rem; }
+  .twin-launch-btn {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    padding: 1rem 2rem; border: none; border-radius: 14px;
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    color: #fff; font-family: inherit;
+    font-size: 1.05rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px -4px rgba(13,148,136,0.35);
+    position: relative; overflow: hidden;
+  }
+  .twin-launch-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.25s ease;
+  }
+  .twin-launch-btn:hover::before { opacity: 1; }
+  .twin-launch-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(13,148,136,0.4);
+  }
+  .twin-launch-btn:active { transform: translateY(0); }
+  .twin-launch-btn svg { flex-shrink: 0; }
+  .twin-launch-hint {
+    margin-top: 0.75rem; font-size: 0.8rem; color: #94a3b8;
+  }
+
+  /* ── Deep Link Card (shown when coming from QR scan) ── */
+  .twin-deeplink {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 14px; padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem; display: none;
+  }
+  .twin-deeplink.visible { display: block; animation: twin-fadeIn 0.4s ease; }
+  .twin-deeplink-label {
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #2dd4bf; margin-bottom: 0.5rem;
+  }
+  .twin-deeplink-asset {
+    font-size: 1.2rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem;
+  }
+  .twin-deeplink-url {
+    font-size: 0.75rem; color: #64748b;
+    word-break: break-all; margin-bottom: 0.75rem;
+  }
+  .twin-deeplink-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border: none; border-radius: 8px;
+    background: rgba(45,212,191,0.15); color: #2dd4bf;
+    font-family: inherit; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .twin-deeplink-btn:hover { background: rgba(45,212,191,0.25); }
+
+  /* ── Quick Actions Grid ── */
+  .twin-actions-label {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #94a3b8; margin-bottom: 0.75rem;
+  }
+  .twin-actions {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  .twin-action-card {
+    display: flex; align-items: flex-start; gap: 0.875rem;
+    padding: 1.125rem 1.25rem; border-radius: 12px;
+    border: 1px solid #e2e8f0; background: #fff;
+    text-decoration: none; color: inherit;
+    transition: all 0.2s;
+  }
+  .twin-action-card:hover {
+    border-color: #cbd5e1; transform: translateY(-1px);
+    box-shadow: 0 4px 16px -4px rgba(15,23,42,0.1);
+  }
+  .twin-action-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1.2rem;
+  }
+  .twin-action-icon.teal { background: rgba(20,184,166,0.1); }
+  .twin-action-icon.slate { background: #f1f5f9; }
+  .twin-action-icon.amber { background: rgba(245,158,11,0.1); }
+  .twin-action-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.15rem; }
+  .twin-action-desc { font-size: 0.75rem; color: #64748b; }
+
+  @keyframes twin-fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+</style>
+
+<div class="twin-module">
+  <div class="twin-hero">
+    <div class="twin-hero-top">
+      <div>
+        <h2>Digital Twin</h2>
+        <p class="twin-hero-sub">3D facility visualization powered by Autodesk Tandem</p>
+      </div>
+      <div class="twin-status-pill">
+        <span class="twin-status-dot"></span>
+        <span id="twin-status-text">Connected</span>
+      </div>
+    </div>
+
+    <div class="twin-facility-card">
+      <div class="twin-facility-row">
+        <div class="twin-facility-item">
+          <div class="twin-facility-label">Facility</div>
+          <div class="twin-facility-value" id="twin-facility-name">Abbott MRI D</div>
+        </div>
+        <div class="twin-facility-item">
+          <div class="twin-facility-label">Platform</div>
+          <div class="twin-facility-value">Autodesk Tandem</div>
+        </div>
+        <div class="twin-facility-item">
+          <div class="twin-facility-label">Facility URN</div>
+          <div class="twin-facility-value mono" id="twin-facility-urn">—</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div id="tandem-viewer" style="flex:1;min-height:320px;background:#f8fafc"></div>
+
+  <div class="twin-body">
+    <!-- Deep-link card (hidden by default, shown when arriving from QR scan) -->
+    <div class="twin-deeplink" id="twin-deeplink">
+      <div class="twin-deeplink-label">&#x1f4cd; Asset Deep Link from QR Scan</div>
+      <div class="twin-deeplink-asset" id="twin-dl-asset">—</div>
+      <div class="twin-deeplink-url" id="twin-dl-url">—</div>
+      <a href="#" id="twin-dl-btn" class="twin-deeplink-btn" target="_blank" rel="noopener">
+        Open Asset in Tandem &#x2197;
+      </a>
+    </div>
+
+    <!-- Main launch button -->
+    <div class="twin-launch-section">
+      <a href="#" id="twin-launch-btn" class="twin-launch-btn" target="_blank" rel="noopener">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+        </svg>
+        Open Facility in Tandem
+      </a>
+      <p class="twin-launch-hint">Opens Autodesk Tandem in a new browser tab with full 3D navigation.</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="twin-actions-label">Quick Actions</div>
+    <div class="twin-actions" id="twin-actions">
+      <a href="#/qr" class="twin-action-card">
+        <div class="twin-action-icon teal">&#x1f50e;</div>
+        <div>
+          <div class="twin-action-title">QR Portal</div>
+          <div class="twin-action-desc">Browse assets &amp; test scan links</div>
+        </div>
+      </a>
+      <a href="#/qr-admin" class="twin-action-card">
+        <div class="twin-action-icon slate">&#x1f527;</div>
+        <div>
+          <div class="twin-action-title">QR Generator</div>
+          <div class="twin-action-desc">Create &amp; print QR code sheets</div>
+        </div>
+      </a>
+      <a href="#" id="twin-action-help" class="twin-action-card" target="_blank">
+        <div class="twin-action-icon amber">&#x1f4f1;</div>
+        <div>
+          <div class="twin-action-title">Help Center</div>
+          <div class="twin-action-desc">Preview the QR scan landing page</div>
+        </div>
+      </a>
+    </div>
+  </div>
 </div>
