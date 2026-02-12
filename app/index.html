@@ -4,60 +4,146 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Aptitude Building Platform</title>
-  <!-- fonts (preconnects are fine to omit if you like) -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
   <style>
-    :root{--line:#e2e8f0}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"DM Sans",system-ui;background:#f8fafc;color:#0f172a}
-    .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
-    .sidebar{background:linear-gradient(135deg,#0f172a,#334155);color:#e2e8f0;padding:20px}
-    .brand{display:flex;gap:.5rem;font-weight:700;color:#2dd4bf;margin-bottom:16px}
-    .nav a{display:block;padding:.6rem .75rem;border-radius:10px;color:#e2e8f0;text-decoration:none}
-    .nav a.active,.nav a:hover{background:rgba(255,255,255,.08)}
-    .main{padding:20px}
-    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px -12px rgba(15,23,42,.15)}
+    :root {
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-400: #94a3b8;
+      --teal-400: #2dd4bf;
+      --line: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #0f172a; }
+
+    .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: linear-gradient(135deg, var(--slate-900), var(--slate-700));
+      color: #e2e8f0; padding: 1.5rem;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .sidebar::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 20% 80%, rgba(20,184,166,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .sidebar > * { position: relative; z-index: 1; }
+
+    .brand {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.35rem; font-weight: 400; color: #fff;
+      margin-bottom: 0.25rem;
+    }
+    .brand-sub {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal-400); margin-bottom: 2rem;
+    }
+
+    .nav-label {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--slate-400);
+      margin-bottom: 0.5rem; padding-left: 0.75rem;
+    }
+    .nav a {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.7rem 0.75rem; border-radius: 10px;
+      color: #cbd5e1; text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+    .nav a.active { background: rgba(45,212,191,0.1); color: var(--teal-400); }
+    .nav a .nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+
+    .sidebar-footer {
+      margin-top: auto; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.7rem; color: var(--slate-400);
+    }
+    .sidebar-footer a { color: var(--slate-400); text-decoration: none; }
+    .sidebar-footer a:hover { color: var(--teal-400); }
+
+    /* ── Main content ── */
+    .main { padding: 1.5rem; overflow-y: auto; }
+    .card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px -12px rgba(15,23,42,0.12);
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
-      <div class="brand">aptitude • Building Platform</div>
+      <div class="brand">aptitude</div>
+      <div class="brand-sub">Building Platform</div>
+
+      <div class="nav-label">Modules</div>
       <nav class="nav">
-        <a href="#/twin">🧭 Twin (3D)</a>
-        <a href="#/qr">🔎 QR Portal</a>
-        <a href="#/qr-admin">🔧 QR Admin</a>
+        <a href="#/twin"><span class="nav-icon">🧭</span> Digital Twin</a>
+        <a href="#/qr"><span class="nav-icon">🔎</span> QR Portal</a>
+        <a href="#/qr-admin"><span class="nav-icon">🔧</span> QR Admin</a>
       </nav>
+
+      <div class="sidebar-footer">
+        <a href="../index.html">← Help Center</a>
+        <span style="margin: 0 0.5rem">·</span>
+        <a href="../qr-generator.html">QR Generator</a>
+      </div>
     </aside>
-    <main class="main"><div id="view-root" class="card" style="padding:0;"></div></main>
+
+    <main class="main">
+      <div id="view-root" class="card"></div>
+    </main>
   </div>
 
   <script type="module">
-    async function getConfig(){
-      return (await fetch('./config/client.json', { cache:'no-store' })).json();
+    async function getConfig() {
+      return (await fetch('./config/client.json', { cache: 'no-store' })).json();
     }
+
     const routes = {
-      '/twin': async (root,cfg)=> (await import('./modules/twin/twin.js')).render(root,cfg),
-      '/qr': async (root,cfg)=> (await import('./modules/qr/portal.js')).render(root,cfg),
-      '/qr-admin': async (root,cfg)=> (await import('./modules/qr-admin/admin.js')).render(root,cfg)
+      '/twin':     async (root, cfg) => (await import('./modules/twin/twin.js')).render(root, cfg),
+      '/qr':       async (root, cfg) => (await import('./modules/qr/portal.js')).render(root, cfg),
+      '/qr-admin': async (root, cfg) => (await import('./modules/qr-admin/admin.js')).render(root, cfg)
     };
-    function setActive(r){
-      document.querySelectorAll('.nav a')
-        .forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+r));
+
+    function setActive(route) {
+      document.querySelectorAll('.nav a').forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === '#' + route)
+      );
     }
-    async function navigate(){
-      const cfg = await getConfig();
-      const route = (location.hash||'#/twin').replace('#','');
+
+    async function navigate() {
+      const cfg   = await getConfig();
+      const route = (location.hash || '#/twin').replace('#', '');
       setActive(route);
+
       const root = document.getElementById('view-root');
+      root.innerHTML = '';
+
       if (routes[route]) {
-        await routes[route](root, cfg);
+        try {
+          await routes[route](root, cfg);
+        } catch (err) {
+          root.innerHTML = `<div style="padding:2rem;color:#dc2626">
+            <p><strong>Module error:</strong> ${err.message}</p>
+            <pre style="font-size:0.75rem;margin-top:0.5rem;color:#64748b">${err.stack || ''}</pre>
+          </div>`;
+          console.error('Module load error:', err);
+        }
       } else {
         location.hash = '#/twin';
       }
     }
+
     window.addEventListener('hashchange', navigate);
     navigate();
   </script>
